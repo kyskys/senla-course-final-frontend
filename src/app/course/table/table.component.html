@@ -1,0 +1,55 @@
+<div style="margin: auto; max-width: 1000px; margin-top:50px">
+   <input [(ngModel)]="id" placeholder="id">
+    	 <input [(ngModel)]="name" placeholder="name">
+    	 <input [(ngModel)]="lecturer" placeholder="lecturer">
+    	 <button class="btn btn-default" (click) = "reloadCourses($event);">Search</button>
+    <data-table id="courses-grid"
+        headerTitle="Courses"
+        [items]="courses"
+        [itemCount]="courseCount"
+        (reload)="reloadCourses($event)"
+
+        [limit]="8"
+        [sortBy]="'name'"
+        [sortAsc]="true"
+
+        [selectColumn]="true"
+        [multiSelect]="true"
+        [substituteRows]="false"
+        [expandableRows]="false"
+        [translations]="translations"
+        [indexColumnHeader]="'#'"
+        [selectOnRowClick]="true"
+        >
+         
+         <data-table-column
+            [property]="'id'"
+            [header]="'Id'"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'name'"
+            [header]="'Name'"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'lecturer'"
+            [header]="'Lecturer id'"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'description'"
+            [header]="'Description'"
+            [sortable]="false">
+        </data-table-column>
+    </data-table>
+    <div>
+    <div>
+        <b>Selected:</b>
+        <span [textContent]="courseTable.selectedRows.length"></span>
+    </div>
+    <div *ngFor="let selected of courseTable.selectedRows">
+        <span [textContent]="selected.item.name"></span>
+    </div>
+  </div>
+</div>

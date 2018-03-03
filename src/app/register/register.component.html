@@ -1,0 +1,17 @@
+<div style="text-align: center;">
+<p>type name: *</p>
+  <input [(ngModel)]="name" placeholder="name...">{{nameMessage}}
+<p> type login: *</p>
+  <input [(ngModel)]="login" placeholder="login...">{{loginMessage}}
+<p> type password: * </p>
+  <input [(ngModel)]="password" placeholder="password...">{{passwordMessage}}
+<p> type phone number:</p>
+  <input [(ngModel)]="number" placeholder="+375 XX XXXXXXXX">{{phoneMessage}}
+<p> type email:</p>
+  <input [(ngModel)]="email" placeholder="test@example.com">{{emailMessage}}
+<p><input type="radio" name="role" (click)="role='student'" checked>Student<br/>
+<input type="radio" name="role" (click)="role='lecturer'">Lecturer</p>
+<button class="btn btn-default" (click)="register();">Войти</button>
+<p>{{registerMessage}}</p>
+{{role}}
+</div>
