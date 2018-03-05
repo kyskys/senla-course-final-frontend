@@ -1,13 +1,12 @@
 <div style="margin: auto; max-width: 1000px; margin-top:50px">
    <input [(ngModel)]="id" placeholder="id">
     	 <input [(ngModel)]="name" placeholder="name">
-    	 <input [(ngModel)]="lecturer" placeholder="lecturer">
-    	 <button class="btn btn-default" (click) = "courseTable.reloadItems();">Search</button>
-    <data-table id="courses-grid"
-        headerTitle="Courses"
-        [items]="courses"
-        [itemCount]="courseCount"
-        (reload)="reloadCourses($event)"
+    	 <button class="btn btn-default" (click) = "groupTable.reloadItems();">Search</button>
+    <data-table id="groups-grid"
+        headerTitle="groups"
+        [items]="groups"
+        [itemCount]="groupCount"
+        (reload)="reloadGroups($event)"
 
         [limit]="8"
         [sortBy]="'name'"
@@ -32,23 +31,13 @@
             [header]="'Name'"
             [sortable]="true">
         </data-table-column>
-        <data-table-column
-            [property]="'lecturer'"
-            [header]="'Lecturer name'"
-            [sortable]="true">
-        </data-table-column>
-        <data-table-column
-            [property]="'description'"
-            [header]="'Description'"
-            [sortable]="false">
-        </data-table-column>
     </data-table>
     <div>
     <div>
         <b>Selected:</b>
-        <span [textContent]="courseTable.selectedRows.length"></span>
+        <span [textContent]="groupTable.selectedRows.length"></span>
     </div>
-    <div *ngFor="let selected of courseTable.selectedRows">
+    <div *ngFor="let selected of groupTable.selectedRows">
         <span [textContent]="selected.item.name"></span>
     </div>
   </div>

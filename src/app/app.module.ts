@@ -13,12 +13,22 @@ import { RegisterComponent } from './register/register.component';
 import { CourseMainComponent } from './course.main/course.main.component';
 import { DataTableModule } from './data-table';
 import { CourseTableComponent } from './course/table/table.component';
+import { LectionTableComponent } from './lection/table/table.component';
+import { HeaderComponent } from './header/header.component';
+import { GroupTableComponent } from './group/table/table.component';
+import { LecturerTableComponent } from './lecturer/table/table.component';
+import { MarkTableComponent } from './mark/table/table.component';
+import { ModeComponent } from './mode/mode.component';
 
 const routes: Routes =[
     { path: '', component: AuthorisationComponent},
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
     { path: 'register', component: RegisterComponent},
-    {path: 'course', component: CourseTableComponent}
+    {path: 'course', component: CourseTableComponent},
+    {path: 'lection', component: LectionTableComponent},
+    {path: 'group', component: GroupTableComponent},
+    {path: 'lecturer', component: LecturerTableComponent},
+    {path: 'mark', component: MarkTableComponent},
 ];
 
 @NgModule({
@@ -28,7 +38,13 @@ const routes: Routes =[
     ProfileComponent,
     RegisterComponent,
     CourseMainComponent,
-    CourseTableComponent
+    CourseTableComponent,
+    LectionTableComponent,
+    HeaderComponent,
+    GroupTableComponent,
+    LecturerTableComponent,
+    MarkTableComponent,
+    ModeComponent
   ],
   imports: [
     BrowserModule,

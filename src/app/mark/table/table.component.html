@@ -1,13 +1,13 @@
 <div style="margin: auto; max-width: 1000px; margin-top:50px">
    <input [(ngModel)]="id" placeholder="id">
-    	 <input [(ngModel)]="name" placeholder="name">
-    	 <input [(ngModel)]="lecturer" placeholder="lecturer">
-    	 <button class="btn btn-default" (click) = "courseTable.reloadItems();">Search</button>
-    <data-table id="courses-grid"
-        headerTitle="Courses"
-        [items]="courses"
-        [itemCount]="courseCount"
-        (reload)="reloadCourses($event)"
+    	 <input [(ngModel)]="pair" placeholder="pair">
+    	  <input [(ngModel)]="student" placeholder="student">
+    	 <button class="btn btn-default" (click) = "markTable.reloadItems();">Search</button>
+    <data-table id="marks-grid"
+        headerTitle="marks"
+        [items]="marks"
+        [itemCount]="markCount"
+        (reload)="reloadMarks($event)"
 
         [limit]="8"
         [sortBy]="'name'"
@@ -28,27 +28,26 @@
             [sortable]="true">
         </data-table-column>
         <data-table-column
-            [property]="'name'"
-            [header]="'Name'"
+            [property]="'pair'"
+            [header]="'Pair name'"
             [sortable]="true">
         </data-table-column>
         <data-table-column
-            [property]="'lecturer'"
-            [header]="'Lecturer name'"
+            [property]="'student'"
+            [header]="'Student name'"
             [sortable]="true">
         </data-table-column>
         <data-table-column
-            [property]="'description'"
-            [header]="'Description'"
-            [sortable]="false">
+            [property]="'mark'"
+            [header]="'Mark'">
         </data-table-column>
     </data-table>
     <div>
     <div>
         <b>Selected:</b>
-        <span [textContent]="courseTable.selectedRows.length"></span>
+        <span [textContent]="markTable.selectedRows.length"></span>
     </div>
-    <div *ngFor="let selected of courseTable.selectedRows">
+    <div *ngFor="let selected of markTable.selectedRows">
         <span [textContent]="selected.item.name"></span>
     </div>
   </div>

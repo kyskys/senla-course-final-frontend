@@ -1,47 +1,56 @@
 import {SearchableService} from './SearchableService';
-import {CourseSearchParams} from'./params/CourseSearchParams';
+import {LecturerSearchParams} from'./params/LecturerSearchParams';
 import {DataTableParams} from '../data-table';
 import {HttpService} from '../service/http.service';
 import {Observable} from "rxjs/Rx";
-import {CourseMainDto} from '../entity/CourseMainDto';
+import {LecturerMainDto} from '../entity/LecturerMainDto';
 
-export class CourseSearchService implements SearchableService<CourseSearchParams,CourseMainDto> {
-	url: string = "http://localhost:8080/webapp/api/course/";
+export class LecturerSearchService implements SearchableService<LecturerSearchParams,LecturerMainDto> {
+	url: string = "http://localhost:8080/webapp/api/lecturer/";
 
 	constructor(private http: HttpService) {
 
 	}
 
 
-	search(searchParams: CourseSearchParams, dataParams: DataTableParams): Observable<CourseMainDto[]> {
+	search(searchParams: LecturerSearchParams, dataParams: DataTableParams): Observable<LecturerMainDto[]> {
 		let result: string = this.url;
 		result+="search?limit="+dataParams.limit+"&sort="+dataParams.sortBy+"&offset="+dataParams.offset+"&asc="+dataParams.sortAsc;
 		if(searchParams.id!==undefined&&searchParams.id>0) {
 			result+="&id="+searchParams.id;
 		}
-		if(searchParams.lecturer!==undefined&&searchParams.lecturer!=="") {
-			result+="&lecturer="+searchParams.lecturer;
+		if(searchParams.email!==undefined&&searchParams.email!=="") {
+			result+="&email="+searchParams.email;
 		}
 		if(searchParams.name!==undefined&&searchParams.name!=="") {
 			result+="&name="+searchParams.name;
 		}
+		if(searchParams.number!==undefined&&searchParams.number>0) {
+			result+="&number="+searchParams.number;
+		}
+		console.log(result);
 		return this.http.doGet(result);
 	}
 
-	count(params: CourseSearchParams): Observable<number> {
+	count(params: LecturerSearchParams): Observable<number> {
 		let result: string = this.url+"count";
 		let first: boolean=false;
 		if(params.id!==undefined&&params.id>0) {
 			result+="?id="+params.id;
 			first=true;
 		}
-		if(params.lecturer!==undefined&&params.lecturer!=="") {
-			result+=(first?"&":"?")+"lecturer="+params.lecturer;
+		if(params.email!==undefined&&params.email!=="") {
+			result+=(first?"&":"?")+"email="+params.email;
 			first=true;
 		}
 		if(params.name!==undefined&&params.name!=="") {
 			result+=(first?"&":"?")+"name="+params.name;
+			first=true;
 		}
+		if(params.number!==undefined&&params.number>0) {
+			result+=(first?"&":"?")+"number="+params.number;
+		}
+		console.log(result);
 		return this.http.doGet(result);
 	}
 }

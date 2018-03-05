@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations, DataTableResource } from '../../data-table';
 import {CourseMainDto} from '../../entity/CourseMainDto';
 import {HttpService} from '../../service/http.service';
-import {courses} from './data';
 import {CourseSearchParams} from '../../search/params/CourseSearchParams';
 import {CourseSearchService} from '../../search/CourseSearchService';
 
@@ -16,11 +15,10 @@ import {CourseSearchService} from '../../search/CourseSearchService';
 export class CourseTableComponent implements OnInit {
 
     courses: CourseMainDto[] = [];
-    service: CourseSearchService = new CourseSearchService;
-	courseResource = new DataTableResource(this.courses,this.http, this.service);
+    service: CourseSearchService = new CourseSearchService(this.http);
     courseCount = 0;
 
-    id: string;
+    id: number;
     name: string;
     lecturer: string;
 
@@ -38,12 +36,12 @@ export class CourseTableComponent implements OnInit {
     @ViewChild(DataTable) courseTable;
 
     constructor(private http: HttpService) {
-        this.courseResource.count(this.getSearchParams()).subscribe(count => this.courseCount=count);
+        this.service.count(this.getSearchParams()).subscribe(count => this.courseCount=count);
     }
 
     reloadCourses(dataParams) {
-        this.courseResource.query(dataParams, this.getSearchParams()).subscribe(data => this.courses=data);
-        this.courseResource.count(this.getSearchParams()).subscribe(count => this.courseCount=count);
+        this.service.search(this.getSearchParams(), dataParams).subscribe(data => this.courses=data);
+        this.service.count(this.getSearchParams()).subscribe(count => this.courseCount=count);
     }
 
     // special params:

@@ -1,2 +1,31 @@
-<!--The content below is only a placeholder and can be replaced.-->
-  <router-outlet></router-outlet>
+<div *ngIf="isVisible(); then head else login"></div>
+<ng-template #login>Please login</ng-template>
+<ng-template #head>
+	<div class = "container-fluid">
+		<div class= "row app-button-row app-header">
+			<div class="col-md-5"></div>
+			<div class="col-md-5 text-right">
+				<button class="btn btn-success" (click)="goToProfile();">My profile</button>
+				<button class="btn btn-success" (click)="logout();">Logout</button>
+			</div>
+		</div>
+		<div class = "row app-header-row app-header">
+			<div class="col-md-1"></div>
+			<div class = "col-md-6">
+				Hello, {{getUserName()}}!</div>
+			<div class="col-md-4">		
+			</div>
+		</div>
+		<div class = "row app-nav">
+			<div class="col-md-2"></div>
+			<div class = "col-md-8">
+				<a (click)="goToCourse();">Courses</a> | 
+				<a (click)="goToLection();">Lections</a> |
+				<a (click)="goToGroup();">Groups</a> |
+				<a (click)="goToLecturer();">Lecturers</a> |
+				<a (click)="goToMark();">Marks</a>
+			</div>
+		</div>
+	</div>
+</ng-template>
+ <router-outlet></router-outlet>

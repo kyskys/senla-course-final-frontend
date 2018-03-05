@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getDetails() {
-  this.service.doGet("http://localhost:8080/webapp/api/profile").subscribe(
+  this.service.doGet("http://localhost:8080/webapp/api/user/profile").subscribe(
     (msg:UserDetails)=> {
       this.details=msg;
       this.name=this.details.name;

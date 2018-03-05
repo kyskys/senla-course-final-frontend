@@ -1,5 +1,5 @@
 export class CourseSearchParams {
-	id: string;
+	id: number;
 	name: string;
 	lecturer: string;
 }

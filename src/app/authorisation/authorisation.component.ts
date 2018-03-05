@@ -5,6 +5,7 @@ import {HttpParams,HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {UserCreds} from '../entity/UserCreds';
 import {Message} from '../entity/message';
+import {UserService} from '../search/UserService';
 
 @Component({
   selector: 'app-authorisation',
@@ -22,6 +23,7 @@ export class AuthorisationComponent implements OnInit {
 	message:string;
   codeMessage: Message = new Message();
   error:string;
+  userService: UserService = new UserService(this.service);
   
   constructor(private service: HttpService, private router: Router,private auth:AuthService) {
     this.auth.setToken('');
@@ -41,14 +43,18 @@ export class AuthorisationComponent implements OnInit {
     return user;
   }
   
-  check() {
+  authorize() {
     let user: UserCreds = this.getUser();
   	this.service.doPost("http://localhost:8080/webapp/login", user).subscribe(
       (msg:Message)=> {
       this.codeMessage=msg;
       if(this.codeMessage.code==3000) {
       this.auth.setToken(this.codeMessage.token);
+      this.userService.getCurrentUserName().subscribe(
+      (data:any) => {
+      localStorage.setItem('currentUser',data.name);
       this.redirectToProfile();
+      });
     } else if (this.codeMessage.code==3001) {
       this.message="wrong password";
     } else if (this.codeMessage.code=3002) {

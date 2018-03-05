@@ -18,12 +18,12 @@ export class DataTableResource<T,R> {
         } else {
             result = this.items.slice(); // shallow copy to use for sorting instead of changing the original
         }
-         return this.http.doGet(this.searchService.search(searchParams, dataParams));
+         return this.searchService.search(searchParams, dataParams);
     }
 
 
 count(searchParams: R): Observable<number> {
-        return this.http.doGet(this.searchService.count(searchParams));
+        return this.searchService.count(searchParams);
     }
     
 }
