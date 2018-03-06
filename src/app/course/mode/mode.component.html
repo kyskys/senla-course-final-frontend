@@ -1,3 +1,33 @@
-<p>
-  mode works!
-</p>
+<div *ngIf="checkPageMode(); then edit else create"></div>
+<ng-template #edit>
+  <div class="container-fluid">
+    <h2>Edit course</h2>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Name: {{getName()}}</div>
+      <div class="col-md-4">
+        <input [(ngModel)]="name" placeholder="name..." [disabled]="isViewMode()">
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Description: {{getDescription()}}</div>
+      <div class="col-md-4">
+        <input [(ngModel)]="description" placeholder="description..." [disabled]="isViewMode()">
+      </div>
+    </div>
+    <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+          <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">edit</button>
+          <button class="btn btn-default" [disabled]="isViewMode()" (click)="setViewMode();">save</button>
+        </div>
+      </div>
+  </div>
+  
+</ng-template>	
+<ng-template #create>
+  <input [(ngModel)]="name" placeholder="name..."><br/>
+   <input [(ngModel)]="description" placeholder="description..."><br/>
+   <button class="btn btn-default" (click)="create()">create</button>
+</ng-template>

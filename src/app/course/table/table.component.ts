@@ -3,7 +3,7 @@ import { DataTable, DataTableTranslations, DataTableResource } from '../../data-
 import {CourseMainDto} from '../../entity/CourseMainDto';
 import {HttpService} from '../../service/http.service';
 import {CourseSearchParams} from '../../search/params/CourseSearchParams';
-import {CourseSearchService} from '../../search/CourseSearchService';
+import {CourseService} from '../../service/course.service';
 
 
 @Component({
@@ -12,10 +12,11 @@ import {CourseSearchService} from '../../search/CourseSearchService';
   styleUrls: ['./table.component.css'],
   providers: [HttpService]
 })
+
 export class CourseTableComponent implements OnInit {
 
     courses: CourseMainDto[] = [];
-    service: CourseSearchService = new CourseSearchService(this.http);
+    service: CourseService = new CourseService(this.http);
     courseCount = 0;
 
     id: number;

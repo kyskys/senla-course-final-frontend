@@ -5,7 +5,7 @@ import {HttpService} from '../service/http.service';
 import {Observable} from "rxjs/Rx";
 import {CourseMainDto} from '../entity/CourseMainDto';
 
-export class CourseSearchService implements SearchableService<CourseSearchParams,CourseMainDto> {
+export class asd implements SearchableService<CourseSearchParams,CourseMainDto> {
 	url: string = "http://localhost:8080/webapp/api/course/";
 
 	constructor(private http: HttpService) {

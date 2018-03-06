@@ -28,4 +28,7 @@ export class HttpService{
     	return this.http.post(url, body, this.setAuthHeader());
     }
     
+    doDelete(url:string) {
+        return this.http.delete(url,this.setAuthHeader());
+    }
 }
