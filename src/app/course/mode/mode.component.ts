@@ -25,7 +25,6 @@ export class CourseModeComponent implements OnInit {
   	this.subscription=activateRoute.queryParams.subscribe(params=> {
   		this.id=params['id'];
   		this.mode=params['mode'];
-  		this.reloadItems();
   	});
   }
  

@@ -30,7 +30,7 @@ export class AuthorisationComponent implements OnInit {
   }
 
   redirectToProfile() {
-  this.router.navigate(['course']);
+  this.router.navigate(['courses']);
   }
 
   ngOnInit() {

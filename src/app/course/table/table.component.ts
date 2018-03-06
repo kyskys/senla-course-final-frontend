@@ -4,6 +4,7 @@ import {CourseMainDto} from '../../entity/CourseMainDto';
 import {HttpService} from '../../service/http.service';
 import {CourseSearchParams} from '../../search/params/CourseSearchParams';
 import {CourseService} from '../../service/course.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -36,13 +37,17 @@ export class CourseTableComponent implements OnInit {
 
     @ViewChild(DataTable) courseTable;
 
-    constructor(private http: HttpService) {
+    constructor(private http: HttpService, private router: Router) {
         this.service.count(this.getSearchParams()).subscribe(count => this.courseCount=count);
     }
 
     reloadCourses(dataParams) {
         this.service.search(this.getSearchParams(), dataParams).subscribe(data => this.courses=data);
         this.service.count(this.getSearchParams()).subscribe(count => this.courseCount=count);
+    }
+
+    createCourse() {
+    	this.router.navigate(['course'],{queryParams:{'mode':'create'}});
     }
 
     // special params:

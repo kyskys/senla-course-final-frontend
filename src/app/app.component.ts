@@ -29,7 +29,7 @@ export class AppComponent {
   }
 
   goToCourse() {
-  	this.route.navigate(['course']);
+  	this.route.navigate(['courses']);
   }
 
   goToProfile() {

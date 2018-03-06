@@ -1,8 +1,10 @@
+
 <div style="margin: auto; max-width: 1000px; margin-top:50px">
    <input [(ngModel)]="id" placeholder="id">
     	 <input [(ngModel)]="name" placeholder="name">
     	 <input [(ngModel)]="lecturer" placeholder="lecturer">
     	 <button class="btn btn-default" (click) = "courseTable.reloadItems();">Search</button>
+    	  <button class="btn btn-default" (click) = "createCourse();">Create</button><br/>
     <data-table id="courses-grid"
         headerTitle="Courses"
         [items]="courses"
