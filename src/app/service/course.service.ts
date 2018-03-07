@@ -5,6 +5,8 @@ import {HttpService} from '../service/http.service';
 import {Observable} from "rxjs/Rx";
 import {CourseMainDto} from '../entity/CourseMainDto';
 import {CourseDto} from '../entity/CourseDto';
+import {CourseUpdateDto} from '../entity/CourseUpdateDto';
+
 
 export class CourseService implements SearchableService<CourseSearchParams,CourseMainDto> {
 	url: string = "http://localhost:8080/webapp/api/course/";
@@ -19,15 +21,15 @@ export class CourseService implements SearchableService<CourseSearchParams,Cours
 	}
 
 	create(entity: CourseDto):Observable<CourseMainDto> {
-		return this.http.doPost(this.url,entity);
+		return this.http.doPut(this.url,entity);
 	}
 
-	delete(id: number) {
-		this.http.doDelete(this.url+"?id="+id);
+	delete(id: number):Observable<any> {
+		return this.http.doDelete(this.url+"/"+id);
 	}
 
-	update(entity:CourseDto, id:number) {
-		this.http.doPost(this.url+"?id="+id,entity);
+	update(entity:CourseUpdateDto, id:number):Observable<any> {
+		return this.http.doPost(this.url+"/"+id,entity);
 	}
 
 	search(searchParams: CourseSearchParams, dataParams: DataTableParams): Observable<CourseMainDto[]> {

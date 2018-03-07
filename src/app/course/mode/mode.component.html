@@ -20,7 +20,8 @@
         <div class="col-md-2"></div>
         <div class="col-md-2">
           <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">edit</button>
-          <button class="btn btn-default" [disabled]="isViewMode()" (click)="setViewMode();">save</button>
+          <button class="btn btn-default" [disabled]="isViewMode()" (click)="setViewMode(); updateCourse();">save</button>
+          <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
         </div>
       </div>
   </div>
@@ -29,5 +30,6 @@
 <ng-template #create>
   <input [(ngModel)]="name" placeholder="name..."><br/>
    <input [(ngModel)]="description" placeholder="description..."><br/>
-   <button class="btn btn-default" (click)="create()">create</button>
+   <button class="btn btn-default" (click)="createCourse()">create</button>
+   <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
 </ng-template>

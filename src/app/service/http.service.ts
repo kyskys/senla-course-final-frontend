@@ -24,11 +24,15 @@ export class HttpService{
         return this.http.get(url, this.setAuthHeader());
     }
 
-    doPost(url: string, body):any {
+    doPost(url: string, body:any):any {
     	return this.http.post(url, body, this.setAuthHeader());
     }
     
-    doDelete(url:string) {
+    doDelete(url:string):any {
         return this.http.delete(url,this.setAuthHeader());
+    }
+
+    doPut(url:string, body:any):any {
+        return this.http.put(url,body,this.setAuthHeader());
     }
 }

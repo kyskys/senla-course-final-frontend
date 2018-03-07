@@ -50,6 +50,20 @@ export class CourseTableComponent implements OnInit {
     	this.router.navigate(['course'],{queryParams:{'mode':'create'}});
     }
 
+    editCourse() {
+    	this.router.navigate(['course'],{queryParams:{'mode':'edit','id':this.courseTable.selectedRows[0].item.id}});
+    }
+
+    viewCourse() {
+    	this.router.navigate(['course'],{queryParams:{'mode':'view','id':this.courseTable.selectedRows[0].item.id}});
+    }
+
+    deleteCourse() {
+    	for (let course of this.courseTable.selectedRows) {
+    		this.service.delete(course.item.id).subscribe(data => this.courseTable.reloadItems());
+    	}
+    }
+
     // special params:
 
     translations = <DataTableTranslations>{
@@ -59,4 +73,13 @@ export class CourseTableComponent implements OnInit {
         paginationLimit: 'Max results',
         paginationRange: 'Result range'
     };
+
+    ifOneSelected():boolean {
+    	return this.courseTable.selectedRows.length!==0&&this.courseTable.selectedRows.length<2?false:true;
+    	
+    }
+
+    ifManySelected():boolean {
+    	return this.courseTable.selectedRows.length!==0?false:true;
+    }
 }

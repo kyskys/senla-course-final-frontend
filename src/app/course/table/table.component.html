@@ -52,6 +52,10 @@
     </div>
     <div *ngFor="let selected of courseTable.selectedRows">
         <span [textContent]="selected.item.name"></span>
-    </div>
+      </div>
+ 	  <button class="btn btn-default" (click) = "viewCourse();" [disabled]="ifOneSelected()">View</button>
+      <button class="btn btn-default" (click) = "editCourse();" [disabled]="ifOneSelected()">Edit</button>
+      <button class="btn btn-default" (click) = "deleteCourse();" [disabled]="ifManySelected()">Delete</button>
   </div>
 </div>
+ 	

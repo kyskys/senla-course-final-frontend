@@ -4,6 +4,9 @@ import {Subscription} from 'rxjs/Subscription';
 import {HttpService} from '../../service/http.service';
 import {CourseService} from '../../service/course.service';
 import {CourseDto} from '../../entity/CourseDto';
+import {CourseUpdateDto} from '../../entity/CourseUpdateDto';
+import {Router} from '@angular/router';
+
 
 @Component({
   selector: 'app-mode',
@@ -21,17 +24,20 @@ export class CourseModeComponent implements OnInit {
 	subscription: Subscription;
 	entity: CourseDto;
 
-  constructor(private activateRoute: ActivatedRoute, private http: HttpService) { 
+  constructor(private activateRoute: ActivatedRoute, private http: HttpService, private router: Router) { 
   	this.subscription=activateRoute.queryParams.subscribe(params=> {
   		this.id=params['id'];
   		this.mode=params['mode'];
+      if(this.id>0) {
+        this.reloadItems();
+      }
   	});
   }
- 
+
   ngOnInit() {
   }
   
-  create() {
+  createCourse() {
   	let newCourse:CourseDto = new CourseDto();
   	newCourse.name=this.name;
   	newCourse.description=this.description;
@@ -39,7 +45,20 @@ export class CourseModeComponent implements OnInit {
   		data=> {
   			this.entity=data;
         this.setViewMode();
+        this.name='';
+        this.description='';
   		});
+  }
+
+  updateCourse() {
+    let updateCourse:CourseUpdateDto = new CourseUpdateDto();
+    updateCourse.description=this.description;
+    updateCourse.name=this.name;
+    this.service.update(updateCourse,this.id).subscribe(data => this.reloadItems());
+  }
+
+  goToRegistry() {
+    this.router.navigate(['courses']);
   }
 
   reloadItems() {
