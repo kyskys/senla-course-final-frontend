@@ -13,7 +13,6 @@ import { Hide } from './utils/hide';
 import { MinPipe } from './utils/min';
 
 export * from './components/types';
-export * from './tools/data-table-resource';
 
 export { DataTable, DataTableColumn, DataTableRow, DataTablePagination, DataTableHeader };
 export const DATA_TABLE_DIRECTIVES = [ DataTable, DataTableColumn ];

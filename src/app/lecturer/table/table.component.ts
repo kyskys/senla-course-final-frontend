@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
-import { DataTable, DataTableTranslations, DataTableResource } from '../../data-table';
+import { DataTable, DataTableTranslations } from '../../data-table';
 import {LecturerMainDto} from '../../entity/LecturerMainDto';
 import {HttpService} from '../../service/http.service';
 import {LecturerSearchParams} from '../../search/params/LecturerSearchParams';
