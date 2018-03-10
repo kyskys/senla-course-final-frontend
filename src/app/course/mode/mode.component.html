@@ -25,7 +25,93 @@
         </div>
       </div>
   </div>
-  
+
+	<h3>Course lections</h3>
+<p-table #crstbl [columns]="cols" [value]="courseLections" [(selection)]="selectedCourseLections" dataKey="id" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="width: 2.25em">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+         <tr>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                <input *ngSwitchCase="'select'" pInputText type="text" (input)="crstbl.filter($event.target.value, col.field,  'equals')">
+                <input *ngSwitchCase="'id'" pInputText type="text" (input)="crstbl.filter($event.target.value, col.field,  'equals')">
+               <input *ngSwitchCase="'name'" pInputText type="text" (input)="crstbl.filter($event.target.value, col.field, 'contains')">
+               <input *ngSwitchCase="'pair'" pInputText type="text" (input)="crstbl.filter($event.target.value, col.field, 'contains')">
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td>
+                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+            </td>
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <ul>
+            <li *ngFor="let lection of selectedCourseLections" style="text-align: left">
+                {{lection.id + ' - ' + lection.name + ' - ' + lection.pair}}
+            </li>
+        </ul>
+    </ng-template>
+</p-table>
+
+<div class="justify-content-around col-md-6" style="display: flex; align-items: center; justify-content: space-evenly; width: 100%; padding: 1em;">
+  <p-button styleClass="ui-button-info" (click)="addLectionToCourse();" [disabled]="isLectionsWithoutCourseSelected()" icon="fa fa-angle-up" style="font-size:2em"></p-button>
+  <p-button styleClass="ui-button-info" (click)="applyChanges();" label="Apply" style="font-size:1.5em"></p-button>
+  <p-button styleClass="ui-button-info" (click)="removeLectionFromCourse();" [disabled]="isCourseLectionsSelected()" icon="fa fa-angle-down" style="font-size:2em"></p-button>
+</div>
+
+<h3>Available lections</h3>
+<p-table #lctnstbl [columns]="cols" [value]="lectionsWithoutCourse" [(selection)]="selectedLectionsWithoutCourse" dataKey="id" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="width: 2.25em">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+         <tr>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                <input *ngSwitchCase="'select'" pInputText type="text" (input)="lctnstbl.filter($event.target.value, col.field,  'equals')">
+                <input *ngSwitchCase="'id'" pInputText type="text" (input)="lctnstbl.filter($event.target.value, col.field,  'equals')">
+               <input *ngSwitchCase="'name'" pInputText type="text" (input)="lctnstbl.filter($event.target.value, col.field, 'contains')">
+               <input *ngSwitchCase="'pair'" pInputText type="text" (input)="lctnstbl.filter($event.target.value, col.field, 'contains')">
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td>
+                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+            </td>
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <ul>
+            <li *ngFor="let lection of selectedLectionsWithoutCourse" style="text-align: left">
+                {{lection.id + ' - ' + lection.name + ' - ' + lection.pair}}
+            </li>
+        </ul>
+    </ng-template>
+</p-table>
+
 </ng-template>	
 <ng-template #create>
   <input [(ngModel)]="name" placeholder="name..."><br/>

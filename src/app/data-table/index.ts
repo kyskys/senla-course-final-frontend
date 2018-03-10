@@ -12,7 +12,7 @@ import { PixelConverter } from './utils/px';
 import { Hide } from './utils/hide';
 import { MinPipe } from './utils/min';
 
-export * from './components/types';
+export * from './components/types';	
 
 export { DataTable, DataTableColumn, DataTableRow, DataTablePagination, DataTableHeader };
 export const DATA_TABLE_DIRECTIVES = [ DataTable, DataTableColumn ];
@@ -27,4 +27,4 @@ export const DATA_TABLE_DIRECTIVES = [ DataTable, DataTableColumn ];
     ],
     exports: [ DataTable, DataTableColumn ]
 })
-export class DataTableModule { }
+export class AppDataTableModule { }

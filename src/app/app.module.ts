@@ -1,3 +1,5 @@
+import {TableModule} from 'primeng/table';
+import {ButtonModule} from 'primeng/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -6,13 +8,13 @@ import { AuthorisationComponent } from './authorisation/authorisation.component'
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
-import {Routes, RouterModule} from '@angular/router';
-import {AuthGuard} from './guard/auth.guard';
-import {CourseGuard} from './guard/course.guard';
-import {AuthService} from './service/auth.service';
+import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './guard/auth.guard';
+import { CourseGuard } from './guard/course.guard';
+import { AuthService } from './service/auth.service';
 import { RegisterComponent } from './register/register.component';
 import { CourseMainComponent } from './course.main/course.main.component';
-import { DataTableModule } from './data-table';
+import { AppDataTableModule } from './data-table';
 import { CourseTableComponent } from './course/table/table.component';
 import { LectionTableComponent } from './lection/table/table.component';
 import { HeaderComponent } from './header/header.component';
@@ -30,7 +32,7 @@ const routes: Routes =[
     {path: 'group', component: GroupTableComponent},
     {path: 'lecturer', component: LecturerTableComponent},
     {path: 'mark', component: MarkTableComponent},
-    {path: 'course',component: CourseModeComponent,canActivate:[CourseGuard]},
+    {path: 'course',component: CourseModeComponent, canActivate:[CourseGuard]},
 ];
 
 @NgModule({
@@ -49,11 +51,13 @@ const routes: Routes =[
     CourseModeComponent
   ],
   imports: [
+    ButtonModule,
+    TableModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
     CommonModule,
-    DataTableModule,
+    AppDataTableModule,
     RouterModule.forRoot(routes)
   ],
   providers: [AuthGuard,AuthService,CourseGuard],
