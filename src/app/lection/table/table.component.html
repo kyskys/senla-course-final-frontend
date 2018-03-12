@@ -4,6 +4,7 @@
     	 <input [(ngModel)]="pair" placeholder="pair">
     	 <input [(ngModel)]="course" placeholder="course">
     	 <button class="btn btn-default" (click) = "lectionTable.reloadItems();">Search</button>
+          <button class="btn btn-default" (click) = "createLection();">Create</button><br/>
     <data-table id="lections-grid"
         headerTitle="Lections"
         [items]="lections"
@@ -52,5 +53,8 @@
     <div *ngFor="let selected of lectionTable.selectedRows">
         <span [textContent]="selected.item.name"></span>
     </div>
+    <button class="btn btn-default" (click) = "viewLection();" [disabled]="ifOneSelected()">View</button>
+      <button class="btn btn-default" (click) = "editLection();" [disabled]="ifOneSelected()">Edit</button>
+      <button class="btn btn-default" (click) = "deleteLection();" [disabled]="ifManySelected()">Delete</button>
   </div>
 </div>

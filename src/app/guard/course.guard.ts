@@ -3,7 +3,7 @@ import {Observable} from "rxjs/Rx";
 import {Injectable} from '@angular/core';
  
  @Injectable()
-export class CourseGuard implements CanActivate{
+export class CardGuard implements CanActivate{
 
 	constructor(private router : Router) {
 

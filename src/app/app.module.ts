@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
-import { CourseGuard } from './guard/course.guard';
+import { CardGuard } from './guard/course.guard';
 import { AuthService } from './service/auth.service';
 import { RegisterComponent } from './register/register.component';
 import { CourseMainComponent } from './course.main/course.main.component';
@@ -22,17 +22,21 @@ import { GroupTableComponent } from './group/table/table.component';
 import { LecturerTableComponent } from './lecturer/table/table.component';
 import { MarkTableComponent } from './mark/table/table.component';
 import { CourseModeComponent } from './course/mode/mode.component';
+import { LectionCardComponent } from './lection/card/card.component';
+import {DropdownModule} from 'primeng/dropdown';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 const routes: Routes =[
     { path: '', component: AuthorisationComponent},
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
     { path: 'register', component: RegisterComponent},
     {path: 'courses', component: CourseTableComponent},
-    {path: 'lection', component: LectionTableComponent},
+    {path: 'lections', component: LectionTableComponent},
     {path: 'group', component: GroupTableComponent},
     {path: 'lecturer', component: LecturerTableComponent},
     {path: 'mark', component: MarkTableComponent},
-    {path: 'course',component: CourseModeComponent, canActivate:[CourseGuard]},
+    {path: 'course',component: CourseModeComponent, canActivate:[CardGuard]},
+    {path: 'lection',component: LectionCardComponent, canActivate:[CardGuard]},
 ];
 
 @NgModule({
@@ -48,7 +52,8 @@ const routes: Routes =[
     GroupTableComponent,
     LecturerTableComponent,
     MarkTableComponent,
-    CourseModeComponent
+    CourseModeComponent,
+    LectionCardComponent
   ],
   imports: [
     ButtonModule,
@@ -58,9 +63,11 @@ const routes: Routes =[
     HttpClientModule,
     CommonModule,
     AppDataTableModule,
+    DropdownModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [AuthGuard,AuthService,CourseGuard],
+  providers: [AuthGuard,AuthService,CardGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

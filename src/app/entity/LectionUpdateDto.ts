@@ -1,5 +1,5 @@
 export class LectionUpdateDto {
 	name:string;
-	pair:string;
-	course: string;
+	pair:number;
+	course: number;
 }

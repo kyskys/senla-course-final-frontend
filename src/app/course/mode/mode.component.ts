@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs/Subscription';
 import {HttpService} from '../../service/http.service';
 import {CourseService} from '../../service/course.service';
 import {LectionService} from '../../service/lection.service';
+import {LecturerService} from '../../service/lecturer.service';
 import {CourseDto} from '../../entity/CourseDto';
 import {CourseUpdateDto} from '../../entity/CourseUpdateDto';
 import {CourseLectionDto} from '../../entity/CourseLectionDto';
+import {CourseMainDto} from '../../entity/CourseMainDto';
 import {Router} from '@angular/router';
+import {SelectedItemDto} from'../../entity/SelectedItemDto';
+import {SelectItem} from 'primeng/api';
 
 
 @Component({
@@ -20,6 +23,7 @@ export class CourseModeComponent implements OnInit {
 
 	courseService: CourseService = new CourseService(this.http);
   lectionService: LectionService = new LectionService(this.http);
+  lecturerService: LecturerService = new LecturerService(this.http);
   courseLections:CourseLectionDto[];
   selectedCourseLections:CourseLectionDto[] =[];
   lectionsWithoutCourse: CourseLectionDto[];
@@ -28,14 +32,21 @@ export class CourseModeComponent implements OnInit {
 	name: string;
 	description: string;
 	mode: string;
-	subscription: Subscription;
-	entity: CourseDto;
+	entity: CourseMainDto;
   cols:any[];
+  lecturers: SelectItem[] =[];
+  selectedLecturer: SelectItem;
 
   constructor(private activateRoute: ActivatedRoute, private http: HttpService, private router: Router) { 
-  	this.subscription=activateRoute.queryParams.subscribe(params=> {
+  	activateRoute.queryParams.subscribe(params=> {
   		this.id=params['id'];
-  		this.mode=params['mode'];
+  		this.mode=params['mode']; 
+      this.lecturerService.getAll().subscribe(data => {
+      data.map(lecturer => {
+        this.lecturers.push({label:lecturer.name,value:lecturer.id});
+      });
+      
+    });
       if(this.id>0) {
         this.reloadItems();
       }
@@ -58,9 +69,9 @@ export class CourseModeComponent implements OnInit {
     this.courseService.create(newCourse).subscribe(
   		data=> {
   			this.entity=data;
+        this.id=this.entity.id;
         this.setViewMode();
-        this.name='';
-        this.description='';
+        this.reloadItems();
   		});
   }
 
@@ -68,6 +79,7 @@ export class CourseModeComponent implements OnInit {
     let updateCourse:CourseUpdateDto = new CourseUpdateDto();
     updateCourse.description=this.description;
     updateCourse.name=this.name;
+    updateCourse.lecturer=Number(this.selectedLecturer);
     this.courseService.update(updateCourse,this.id).subscribe(data => this.reloadItems());
   }
 
@@ -78,6 +90,8 @@ export class CourseModeComponent implements OnInit {
   reloadItems() {
     this.courseService.get(this.id).subscribe(data => {
   		this.entity=data;
+       this.name='';
+        this.description='';
   	});
      this.lectionService.getLectionsByCourseId(this.id).subscribe(
           data => {
@@ -102,8 +116,12 @@ export class CourseModeComponent implements OnInit {
   	return this.entity===undefined?"":this.entity.name;
   }
 
-  getDescription():string{
+  getDescription():string {
   	return this.entity===undefined?"":this.entity.description;
+  }
+
+  getLecturer(): string{
+    return this.entity===undefined?"":this.entity.lecturer;
   }
 
   isViewMode():boolean{
@@ -157,4 +175,5 @@ export class CourseModeComponent implements OnInit {
       this.courseLections.map(lection => array.push(lection.id));
       return this.courseService.addLectionsToCourse(array,this.id).subscribe(data => this.reloadItems());
     }
+
 }

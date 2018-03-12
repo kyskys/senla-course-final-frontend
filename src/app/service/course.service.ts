@@ -9,15 +9,19 @@ import {CourseUpdateDto} from '../entity/CourseUpdateDto';
 
 
 export class CourseService implements SearchableService<CourseSearchParams,CourseMainDto> {
-	url: string = "http://localhost:8080/webapp/api/course";
+	url: string = "http://localhost:8080/webapp/api/course/";
 
 	constructor(private http: HttpService) {
 
 	}
 
 	get(id: number):Observable<CourseMainDto> {
-		let resultUrl=this.url+"/"+id+"/";
+		let resultUrl=this.url+id+"/";
 		return this.http.doGet(resultUrl);
+	}
+
+	getAll():Observable<CourseMainDto[]> {
+		return this.http.doGet(this.url);
 	}
 
 	create(entity: CourseDto):Observable<CourseMainDto> {
@@ -25,19 +29,19 @@ export class CourseService implements SearchableService<CourseSearchParams,Cours
 	}
 
 	delete(id: number):Observable<any> {
-		return this.http.doDelete(this.url+"/"+id);
+		return this.http.doDelete(this.url+id);
 	}
 
 	update(entity:CourseUpdateDto, id:number):Observable<any> {
-		return this.http.doPost(this.url+"/"+id,entity);
+		return this.http.doPost(this.url+id,entity);
 	}
 
 	addLectionsToCourse(array: any, id:number):Observable<any> {
-		return this.http.doPost(this.url+"/"+id+"/add/lection", array);
+		return this.http.doPost(this.url+id+"/add/lection", array);
 	}
 
 	search(searchParams: CourseSearchParams, dataParams: DataTableParams): Observable<CourseMainDto[]> {
-		let resultUrl: string = this.url+"/";
+		let resultUrl: string = this.url;
 		resultUrl+="search?limit="+dataParams.limit+"&sort="+dataParams.sortBy+"&offset="+dataParams.offset+"&asc="+dataParams.sortAsc;
 		if(searchParams.id!==undefined&&searchParams.id>0) {
 			resultUrl+="&id="+searchParams.id;
@@ -52,7 +56,7 @@ export class CourseService implements SearchableService<CourseSearchParams,Cours
 	}
 
 	count(params: CourseSearchParams): Observable<number> {
-		let resultUrl: string = this.url+"/count";
+		let resultUrl: string = this.url+"count";
 		let first: boolean=false;
 		if(params.id!==undefined&&params.id>0) {
 			resultUrl+="?id="+params.id;

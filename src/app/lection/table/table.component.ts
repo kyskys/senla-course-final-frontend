@@ -3,7 +3,8 @@ import { DataTable, DataTableTranslations } from '../../data-table';
 import {LectionMainDto} from '../../entity/LectionMainDto';
 import {HttpService} from '../../service/http.service';
 import {LectionSearchParams} from '../../search/params/LectionSearchParams';
-import {LectionSearchService} from '../../search/LectionSearchService';
+import {LectionService} from '../../service/lection.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -16,7 +17,7 @@ import {LectionSearchService} from '../../search/LectionSearchService';
 export class LectionTableComponent implements OnInit {
 
     lections: LectionMainDto[] = [];
-    service: LectionSearchService = new LectionSearchService(this.http);
+    service: LectionService = new LectionService(this.http);
     lectionCount = 0;
 
     id: number;
@@ -38,13 +39,31 @@ export class LectionTableComponent implements OnInit {
 
     @ViewChild(DataTable) lectionTable;
 
-    constructor(private http: HttpService) {
+    constructor(private http: HttpService, private router: Router) {
         this.service.count(this.getSearchParams()).subscribe(count => this.lectionCount=count);
     }
 
     reloadLections(dataParams) {
         this.service.search(this.getSearchParams(), dataParams).subscribe(data => this.lections=data);
         this.service.count(this.getSearchParams()).subscribe(count => this.lectionCount=count);
+    }
+
+   createLection() {
+      this.router.navigate(['lection'],{queryParams:{'mode':'create'}});
+    }
+
+    editLection() {
+      this.router.navigate(['lection'],{queryParams:{'mode':'edit','id':this.lectionTable.selectedRows[0].item.id}});
+    }
+
+    viewLection() {
+      this.router.navigate(['lection'],{queryParams:{'mode':'view','id':this.lectionTable.selectedRows[0].item.id}});
+    }
+
+    deleteLection() {
+      for (let lection of this.lectionTable.selectedRows) {
+        this.service.delete(lection.item.id).subscribe(data => this.lectionTable.reloadItems());
+      }
     }
 
     // special params:
@@ -56,4 +75,13 @@ export class LectionTableComponent implements OnInit {
         paginationLimit: 'Max results',
         paginationRange: 'Result range'
     };
+
+    ifOneSelected():boolean {
+      return this.lectionTable.selectedRows.length!==0&&this.lectionTable.selectedRows.length<2?false:true;
+      
+    }
+
+    ifManySelected():boolean {
+      return this.lectionTable.selectedRows.length!==0?false:true;
+    }
 }

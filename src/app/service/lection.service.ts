@@ -10,7 +10,7 @@ import {LectionUpdateDto} from '../entity/LectionUpdateDto';
 
 
 export class LectionService implements SearchableService<LectionSearchParams,LectionMainDto> {
-	url: string = "http://localhost:8080/webapp/api/lection";
+	url: string = "http://localhost:8080/webapp/api/lection/";
 
 	constructor(private http: HttpService) {
 
@@ -27,20 +27,20 @@ export class LectionService implements SearchableService<LectionSearchParams,Lec
 
 
 	delete(id: number):Observable<any> {
-		return this.http.doDelete(this.url+"/"+id);
+		return this.http.doDelete(this.url+id);
 	}
 
 	update(entity:LectionUpdateDto, id:number):Observable<any> {
-		return this.http.doPost(this.url+"/"+id,entity);
+		return this.http.doPost(this.url+id,entity);
 	}
 
 	getLectionsByCourseId(id: number): Observable<CourseLectionDto[]> {
-		let result: string = this.url+"/course/"+id;
+		let result: string = this.url+"course/"+id;
 		return this.http.doGet(result);
 	}
 
 	getLectionsWithoutCourse(id: number): Observable<CourseLectionDto[]> {
-		let result: string = this.url+"/course/";
+		let result: string = this.url+"course/";
 		return this.http.doGet(result);
 	}
 

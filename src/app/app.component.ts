@@ -25,7 +25,7 @@ export class AppComponent {
  }
 
   goToLection() {
-  	this.route.navigate(['lection']);
+  	this.route.navigate(['lections']);
   }
 
   goToCourse() {
