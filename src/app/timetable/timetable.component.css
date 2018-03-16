@@ -1,0 +1,6 @@
+.timetable-header {
+	padding: 1em 1em 1em 1em;
+}
+.timetable-header > p-dropdown {
+	padding-right: 2em;
+}

@@ -1,34 +1,30 @@
 import {SearchableService} from '../search/SearchableService';
-import {CourseSearchParams} from'../search/params/CourseSearchParams';
+import {GroupSearchParams} from'../search/params/GroupSearchParams';
 import {DataTableParams} from '../data-table';
 import {HttpService} from '../service/http.service';
 import {Observable} from "rxjs/Rx";
-import {CourseMainDto} from '../entity/CourseMainDto';
+import {GroupMainDto} from '../entity/GroupMainDto';
+import {GroupDto} from '../entity/GroupDto';
 import {DictionaryItem} from '../entity/DictionaryItem';
-import {CourseDto} from '../entity/CourseDto';
-import {CourseUpdateDto} from '../entity/CourseUpdateDto';
 
 
-export class CourseService implements SearchableService<CourseSearchParams,CourseMainDto> {
-	url: string = "http://localhost:8080/webapp/api/course/";
+export class GroupService implements SearchableService<GroupSearchParams,GroupMainDto> {
+	url: string = "http://localhost:8080/webapp/api/group/";
 
 	constructor(private http: HttpService) {
 
 	}
 
-	get(id: number):Observable<CourseMainDto> {
+	get(id: number):Observable<GroupMainDto> {
 		let resultUrl=this.url+id+"/";
 		return this.http.doGet(resultUrl);
 	}
 
-	getAll():Observable<CourseMainDto[]> {
+	getAll():Observable<GroupMainDto[]> {
 		return this.http.doGet(this.url);
 	}
-	getDictionary():Observable<DictionaryItem[]> {
-		return this.http.doGet(this.url+"dictionary");
-	}
 
-	create(entity: CourseDto):Observable<CourseMainDto> {
+	create(entity: GroupDto):Observable<GroupMainDto> {
 		return this.http.doPut(this.url,entity);
 	}
 
@@ -36,22 +32,33 @@ export class CourseService implements SearchableService<CourseSearchParams,Cours
 		return this.http.doDelete(this.url+id);
 	}
 
-	update(entity:CourseUpdateDto, id:number):Observable<any> {
+	update(entity:GroupDto, id:number):Observable<any> {
 		return this.http.doPost(this.url+id,entity);
 	}
-
-	addLectionsToCourse(array: any, id:number):Observable<any> {
-		return this.http.doPost(this.url+id+"/add/lection", array);
+	
+	addStudentsToGroup(array: any, id:number):Observable<any> {
+		return this.http.doPost(this.url+id+"/add/student", array);
 	}
 
-	search(searchParams: CourseSearchParams, dataParams: DataTableParams): Observable<CourseMainDto[]> {
+	getDictionary() : Observable<DictionaryItem[]> {
+		return this.http.doGet(this.url+"dictionary");
+	}
+
+	getGroupsByPairId(id: number): Observable<GroupMainDto[]> {
+		let result: string = this.url+"pair/"+id;
+		return this.http.doGet(result);
+	}
+
+	getGroupsWithoutPair(id: number): Observable<GroupMainDto[]> {
+		let result: string = this.url+"nopair/"+id;
+		return this.http.doGet(result);
+	}
+
+	search(searchParams: GroupSearchParams, dataParams: DataTableParams): Observable<GroupMainDto[]> {
 		let resultUrl: string = this.url;
 		resultUrl+="search?limit="+dataParams.limit+"&sort="+dataParams.sortBy+"&offset="+dataParams.offset+"&asc="+dataParams.sortAsc;
 		if(searchParams.id!==undefined&&searchParams.id>0) {
 			resultUrl+="&id="+searchParams.id;
-		}
-		if(searchParams.lecturer!==undefined&&searchParams.lecturer!=="") {
-			resultUrl+="&lecturer="+searchParams.lecturer;
 		}
 		if(searchParams.name!==undefined&&searchParams.name!=="") {
 			resultUrl+="&name="+searchParams.name;
@@ -59,15 +66,11 @@ export class CourseService implements SearchableService<CourseSearchParams,Cours
 		return this.http.doGet(resultUrl);
 	}
 
-	count(params: CourseSearchParams): Observable<number> {
+	count(params: GroupSearchParams): Observable<number> {
 		let resultUrl: string = this.url+"count";
 		let first: boolean=false;
 		if(params.id!==undefined&&params.id>0) {
 			resultUrl+="?id="+params.id;
-			first=true;
-		}
-		if(params.lecturer!==undefined&&params.lecturer!=="") {
-			resultUrl+=(first?"&":"?")+"lecturer="+params.lecturer;
 			first=true;
 		}
 		if(params.name!==undefined&&params.name!=="") {

@@ -2,10 +2,6 @@
 <ng-template #edit>
   <div class="container-fluid">
     <h2>Edit lection</h2>
-      <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-3">Pair: {{getPair()}}</div>
-    </div>
     <div class="row create-row">
       <div class="col-md-2"></div>
       <div class="col-md-3">Name: {{getName()}}</div>
@@ -23,8 +19,8 @@
     <div class="row create-row">
       <div class="col-md-2"></div>
       <div class="col-md-2">
-        <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">edit</button>
-        <button class="btn btn-default" [disabled]="isViewMode()" (click)="setViewMode(); updateLection();">save</button>
+        <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">Edit</button>
+        <button class="btn btn-default" [disabled]="isViewMode()" (click)="setViewMode(); updateLection();">Save</button>
         <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
       </div>
     </div>
@@ -43,7 +39,7 @@
     <div class="row create-row">
       <div class="col-md-2"></div>
       <div class="col-md-2">
-        <button class="btn btn-default" (click)="createLection();">create</button>
+        <button class="btn btn-default" (click)="createLection();">Create</button>
         <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
       </div>
     </div>

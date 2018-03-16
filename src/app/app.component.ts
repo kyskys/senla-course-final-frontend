@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {AuthService} from './service/auth.service';
 import {HttpService} from './service/http.service';
 import {Router} from '@angular/router';
+import {Message} from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,7 @@ export class AppComponent {
   }
 
    goToGroup() {
-  	this.route.navigate(['group']);
+  	this.route.navigate(['groups']);
   }
 
     goToLecturer() {
@@ -45,10 +46,19 @@ export class AppComponent {
   }
 
   goToMark() {
-  	this.route.navigate(['mark']);
+  	this.route.navigate(['marks']);
+  }
+
+  goToPair() {
+    this.route.navigate(['pairs']);
+  }
+
+  goToTimetable() {
+    this.route.navigate(['timetable']);
   }
 
   logout() {
   	this.route.navigate(['']);
   }
+
 }

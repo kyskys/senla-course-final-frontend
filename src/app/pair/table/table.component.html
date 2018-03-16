@@ -1,0 +1,68 @@
+<div style="margin: auto; max-width: 1000px; margin-top:50px">
+   <input [(ngModel)]="id" placeholder="id">
+    	 <input [(ngModel)]="name" placeholder="name">
+    	  <input [(ngModel)]="lection" placeholder="lection">
+          <p-calendar [(ngModel)]="date"></p-calendar>  
+    	 <button class="btn btn-default" (click) = "pairTable.reloadItems();">Search</button>
+         <button class="btn btn-default" (click) = "createPair();">Create</button><br/>
+    <data-table id="pairs-grid"
+        headerTitle="pairs"
+        [items]="pairs"
+        [itemCount]="pairCount"
+        (reload)="reloadPairs($event)"
+
+        [limit]="8"
+        [sortBy]="'name'"
+        [sortAsc]="true"
+
+        [selectColumn]="true"
+        [multiSelect]="true"
+        [substituteRows]="false"
+        [expandableRows]="false"
+        [translations]="translations"
+        [indexColumnHeader]="'#'"
+        [selectOnRowClick]="true"
+        >
+         
+         <data-table-column
+            [property]="'id'"
+            [header]="'Id'"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'name'"
+            [header]="'Name'"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'lection'"
+            [header]="'Lection name'"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'date'"
+            [header]="'Date'"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'startTime'"
+            [header]="'Start time'">
+        </data-table-column>
+         <data-table-column
+            [property]="'endTime'"
+            [header]="'End time'">
+        </data-table-column>
+    </data-table>
+    <div>
+    <div>
+        <b>Selected:</b>
+        <span [textContent]="pairTable.selectedRows.length"></span>
+    </div>
+    <div *ngFor="let selected of pairTable.selectedRows">
+        <span [textContent]="selected.item.name"></span>
+    </div>
+    <button class="btn btn-default" (click) = "viewPair();" [disabled]="!isOneSelected()">View</button>
+      <button class="btn btn-default" (click) = "editPair();" [disabled]="!isOneSelected()">Edit</button>
+      <button class="btn btn-default" (click) = "deletePair();" [disabled]="!isManySelected()">Delete</button>
+  </div>
+</div>

@@ -3,5 +3,4 @@ export class CourseUpdateDto {
 	name:string;
 	lecturer:number;
 	description:string;
-	lections: number[];
 }

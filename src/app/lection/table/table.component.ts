@@ -31,7 +31,6 @@ export class LectionTableComponent implements OnInit {
 	getSearchParams(): LectionSearchParams {
 		let result: LectionSearchParams = new LectionSearchParams;
 		result.id=this.id;
-		result.pair=this.pair;
 		result.name=this.name;
 		result.course=this.course;
 		return result;
@@ -76,12 +75,12 @@ export class LectionTableComponent implements OnInit {
         paginationRange: 'Result range'
     };
 
-    ifOneSelected():boolean {
-      return this.lectionTable.selectedRows.length!==0&&this.lectionTable.selectedRows.length<2?false:true;
+    isOneSelected():boolean {
+      return this.lectionTable.selectedRows.length!==0&&this.lectionTable.selectedRows.length<2;
       
     }
 
-    ifManySelected():boolean {
-      return this.lectionTable.selectedRows.length!==0?false:true;
+    isManySelected():boolean {
+      return this.lectionTable.selectedRows.length!==0;
     }
 }

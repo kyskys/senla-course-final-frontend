@@ -51,11 +51,11 @@ export class CourseTableComponent implements OnInit {
     }
 
     editCourse() {
-    	this.router.navigate(['course'],{queryParams:{'mode':'edit','id':this.courseTable.selectedRows[0].item.id}});
+    	this.router.navigate(['course'],{queryParams:{'mode':'edit','id':this.getCourseId()}});
     }
 
     viewCourse() {
-    	this.router.navigate(['course'],{queryParams:{'mode':'view','id':this.courseTable.selectedRows[0].item.id}});
+    	this.router.navigate(['course'],{queryParams:{'mode':'view','id':this.getCourseId()}});
     }
 
     deleteCourse() {
@@ -74,12 +74,16 @@ export class CourseTableComponent implements OnInit {
         paginationRange: 'Result range'
     };
 
-    ifOneSelected():boolean {
-    	return this.courseTable.selectedRows.length!==0&&this.courseTable.selectedRows.length<2?false:true;
+    isOneSelected():boolean {
+    	return this.courseTable.selectedRows.length!==0&&this.courseTable.selectedRows.length<2;
     	
     }
 
-    ifManySelected():boolean {
-    	return this.courseTable.selectedRows.length!==0?false:true;
+    isManySelected():boolean {
+    	return this.courseTable.selectedRows.length!==0;
+    }
+
+    getCourseId():number {
+        return this.courseTable.selectedRows[0].item.id;
     }
 }

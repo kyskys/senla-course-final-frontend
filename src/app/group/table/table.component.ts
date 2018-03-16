@@ -3,7 +3,8 @@ import { DataTable, DataTableTranslations } from '../../data-table';
 import {GroupMainDto} from '../../entity/GroupMainDto';
 import {HttpService} from '../../service/http.service';
 import {GroupSearchParams} from '../../search/params/GroupSearchParams';
-import {GroupSearchService} from '../../search/GroupSearchService';
+import {GroupService} from '../../service/group.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -15,7 +16,7 @@ import {GroupSearchService} from '../../search/GroupSearchService';
 export class GroupTableComponent implements OnInit {
 
     groups: GroupMainDto[] = [];
-    service: GroupSearchService = new GroupSearchService(this.http);
+    service: GroupService = new GroupService(this.http);
     groupCount = 0;
 
     id: number;
@@ -33,13 +34,31 @@ export class GroupTableComponent implements OnInit {
 
     @ViewChild(DataTable) groupTable;
 
-    constructor(private http: HttpService) {
+    constructor(private http: HttpService, private router: Router) {
         this.service.count(this.getSearchParams()).subscribe(count => this.groupCount=count);
     }
 
     reloadGroups(dataParams) {
         this.service.search(this.getSearchParams(), dataParams).subscribe(data => this.groups=data);
         this.service.count(this.getSearchParams()).subscribe(count => this.groupCount=count);
+    }
+
+    createGroup() {
+      this.router.navigate(['group'],{queryParams:{'mode':'create'}});
+    }
+
+    editGroup() {
+      this.router.navigate(['group'],{queryParams:{'mode':'edit','id':this.groupTable.selectedRows[0].item.id}});
+    }
+
+    viewGroup() {
+      this.router.navigate(['group'],{queryParams:{'mode':'view','id':this.groupTable.selectedRows[0].item.id}});
+    }
+
+    deleteGroup() {
+      for (let Group of this.groupTable.selectedRows) {
+        this.service.delete(Group.item.id).subscribe(data => this.groupTable.reloadItems());
+      }
     }
 
     // special params:
@@ -51,4 +70,13 @@ export class GroupTableComponent implements OnInit {
         paginationLimit: 'Max results',
         paginationRange: 'Result range'
     };
+
+    isOneSelected():boolean {
+      return this.groupTable.selectedRows.length!==0&&this.groupTable.selectedRows.length<2;
+      
+    }
+
+    isManySelected():boolean {
+      return this.groupTable.selectedRows.length!==0;
+    }
 }

@@ -110,9 +110,5 @@ updateLection() {
     return this.entity===undefined?"":this.entity.course;
   }
 
-  getPair():string{
-    return this.entity===undefined?"":this.entity.pair;
-  }
-
 
 }

@@ -1,3 +1,4 @@
+<p-growl [(value)]="msgs"></p-growl>
 <div *ngIf="isVisible(); then head else login"></div>
 <ng-template #login>Please login</ng-template>
 <ng-template #head>
@@ -23,7 +24,9 @@
 				<a (click)="goToLection();">Lections</a> |
 				<a (click)="goToGroup();">Groups</a> |
 				<a (click)="goToLecturer();">Lecturers</a> |
-				<a (click)="goToMark();">Marks</a>
+				<a (click)="goToMark();">Marks</a> |
+				<a (click)="goToPair();">Pairs</a> |
+				<a (click)="goToTimetable();">Timetable</a>
 			</div>
 		</div>
 	</div>

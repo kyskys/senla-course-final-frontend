@@ -4,6 +4,7 @@ import {DataTableParams} from '../data-table';
 import {HttpService} from '../service/http.service';
 import {Observable} from "rxjs/Rx";
 import {LecturerMainDto} from '../entity/LecturerMainDto';
+import {DictionaryItem} from '../entity/DictionaryItem';
 //import {LecturerDto} from '../entity/LecturerDto';
 //import {LecturerUpdateDto} from '../entity/LecturerUpdateDto';
 
@@ -35,6 +36,10 @@ export class LecturerService implements SearchableService<LecturerSearchParams,L
 
 	getAll():Observable<LecturerMainDto[]> {
 		return this.http.doGet(this.url);
+	}
+
+	getDictionary():Observable<DictionaryItem[]> {
+		return this.http.doGet(this.url+"dictionary");
 	}
 
 	search(searchParams: LecturerSearchParams, dataParams: DataTableParams): Observable<LecturerMainDto[]> {

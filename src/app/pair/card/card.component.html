@@ -1,0 +1,243 @@
+<p-growl></p-growl>
+<p-dialog [contentStyle]="{'overflow':'visible'}" [(visible)]="displayModal" [width]="500">
+  <div *ngIf="!(isMarkEditMode()); then createmrk else editmrk"></div>
+  <ng-template #editmrk>
+    <p-header>Edit mark</p-header>
+  </ng-template>
+  <ng-template #createmrk>
+    <p-header>Create mark</p-header>
+  </ng-template>
+  <div class="row create-row">
+    <div class="col-md-5">Student: {{getStudent()}}</div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <p-dropdown [options]="students" [(ngModel)]="selectedStudent" [filter]="true" [disabled]="isMarkEditMode()"></p-dropdown>
+    </div>
+  </div>
+  <div class="row create-row">
+    <div class="col-md-5">Mark: {{getMark()}}</div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <input [(ngModel)]="mark" placeholder="">
+    </div>
+  </div>
+  <ng-template #editmrk>
+    <p-footer>
+      <p-button styleClass="ui-button-info" (click)="hideModal(); updateMark();" label="Edit"></p-button>
+    </p-footer>
+  </ng-template>
+  <ng-template #createmrk>
+    <p-footer>
+      <p-button styleClass="ui-button-info" (click)="hideModal(); createMark();" label="Create"></p-button>
+    </p-footer>
+  </ng-template>
+</p-dialog>
+<div *ngIf="checkPageMode(); then edit else create"></div>
+<ng-template #edit>
+  <div class="container-fluid">
+    <h2>Edit pair</h2>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Name: {{getName()}}</div>
+      <div class="col-md-4">
+        <input [(ngModel)]="name" placeholder="name..." [disabled]="isViewMode()">
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Lection: {{getLection()}}</div>
+      <div class="col-md-4">
+        <p-dropdown [options]="lections" [(ngModel)]="selectedLection" [disabled]="isViewMode()" [filter]="true"></p-dropdown>
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Date: {{getDate()}}</div>
+      <div class="col-md-4">
+        <p-calendar [(ngModel)]="date"></p-calendar>
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Pair time: {{getPairTime()}}</div>
+      <div class="col-md-4">
+        <p-dropdown [options]="pairTimes" [(ngModel)]="selectedPairTime" [disabled]="isViewMode()" [filter]="true"></p-dropdown>
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-2">
+        <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">edit</button>
+        <button class="btn btn-default" [disabled]="isViewMode()" (click)="setViewMode(); updatePair();">save</button>
+        <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
+      </div>
+    </div>
+  </div>
+  <button class = "btn btn-default" (click)="showMarkTable()">Marks</button>
+  <button class = "btn btn-default" (click)="showGroupTable()">Groups</button>
+  <div *ngIf="markTableDisplaying; then mrktable else grptable"></div>
+  <ng-template #mrktable>
+  <h3>Mark table</h3>
+  <p-button styleClass="ui-button-info" (click)="showCreateMarkModal();" label="Create"></p-button>
+  <p-button styleClass="ui-button-info" (click)="showEditMarkModal();" [disabled]="!(isOneMarkSelected())" label="Edit"></p-button>
+  <p-button styleClass="ui-button-info" (click)="deleteMark();" [disabled]="!(isManyMarksSelected())" label="Delete"></p-button>
+  <p-table #marktbl [columns]="markCols" [value]="marks" [(selection)]="selectedMarks" dataKey="id" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width: 2.25em">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+      </tr>
+      <tr>
+        <th style="width: 2.25em"></th>
+        <th *ngFor="let col of columns">
+          <input pInputText type="text" (input)="marktbl.filter($event.target.value, col.field,  col.method)">
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td>
+          <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+        </td>
+        <td *ngFor="let col of columns">
+          {{rowData[col.field]}}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <ul>
+        <li *ngFor="let mark of selectedMarks" style="text-align: left">
+          {{mark.id + ' - ' + mark.pair + ' - ' + mark.student + ' - ' + mark.mark}}
+        </li>
+      </ul>
+    </ng-template>
+  </p-table>
+</ng-template>
+<ng-template #grptable>
+<h3>Pair Groups</h3>
+<p-table #grpwithp [columns]="groupCols" [value]="groupPairs" [(selection)]="selectedGroupPairs" dataKey="id" [paginator]="true" [rows]="10"> <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width: 2.25em">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+      </tr>
+      <tr>
+        <th style="width: 2.25em">
+       <th *ngFor="let col of columns"> 
+          <input pInputText type="text" (input)="grpwithp.filter($event.target.value, col.field,  col.method)">
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td>
+          <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+        </td>
+        <td *ngFor="let col of columns">
+          {{rowData[col.field]}}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <ul>
+        <li *ngFor="let group of selectedGroupPairs" style="text-align: left">
+          {{group.id + ' - ' + group.name}}
+        </li>
+      </ul>
+    </ng-template>
+  </p-table>
+  <div class="justify-content-a ound col-md-6" style="display: flex; align-items: center; justify-content: space-evenly; width: 100%; padding: 1em;">
+    <p-button styleClass="ui-button-info" (click)="addGroupToPair();" [disabled]="!isGroupWithoutPairsSelected()" icon="fa fa-angle-up" style="font-size:2em"></p-button>
+    <p-button styleClass="ui-button-info" (click)="applyChanges();" label="Apply" style="font-size:1.5em"></p-button>
+    <p-button styleClass="ui-button-info" (click)="removeGroupFromPair();" [disabled]="!isGroupPairsSelected()" icon="fa fa-angle-down" style="font-size:2em"></p-button>
+  </div>
+  <h3>Available groups</h3>
+  <p-table #grpwithoutp [columns]="groupCols" [value]="groupWithoutPairs" [(selection)]="selectedGroupWithoutPairs" dataKey="id" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width: 2.25em">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+      </tr>
+      <tr>
+        <th style="width: 2.25em">
+       <th *ngFor="let col of columns"> 
+          <input pInputText type="text" (input)="grpwithoutp.filter($event.target.value, col.field,  col.method)">
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td>
+          <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+        </td>
+        <td *ngFor="let col of columns">
+          {{rowData[col.field]}}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <ul>
+        <li *ngFor="let group of selectedGroupWithoutPairs" style="text-align: left">
+           {{group.id + ' - ' + group.name}}
+        </li>
+      </ul>
+    </ng-template>
+  </p-table>
+
+
+  </ng-template>
+</ng-template>
+<ng-template #create>
+  <div class="container-fluid">
+    <h2>Create pair</h2>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Name:</div>
+      <div class="col-md-4">
+        <input [(ngModel)]="name" placeholder="name..." [disabled]="isViewMode()">
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Lection:</div>
+      <div class="col-md-4">
+        <p-dropdown [options]="lections" [(ngModel)]="selectedLection" [disabled]="isViewMode()" [filter]="true"></p-dropdown>
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Date:</div>
+      <div class="col-md-4">
+        <p-calendar [(ngModel)]="date"></p-calendar>
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-3">Pair time:</div>
+      <div class="col-md-4">
+        <p-dropdown [options]="pairTimes" [(ngModel)]="selectedPairTime" [disabled]="isViewMode()" [filter]="true"></p-dropdown>
+      </div>
+    </div>
+    <div class="row create-row">
+      <div class="col-md-2"></div>
+      <div class="col-md-2">
+        <button class="btn btn-default" (click)="createPair();">Create</button>
+        <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

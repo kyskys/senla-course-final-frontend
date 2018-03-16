@@ -1,0 +1,26 @@
+<p-growl></p-growl>
+<div class="timetable-header">
+  <p-dropdown [options]="days" [(ngModel)]="selectedDay" required="true" [filter]="true" placeholder="Select a date"></p-dropdown>
+  <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [filter]="true" placeholder="Select a group"></p-dropdown>
+  <button class="btn btn-default" (click)="getTimetable()">Show</button>
+</div>
+<p-table #timetbl [columns]="cols" [value]="pairs" dataKey="id" sortField="date" sortMode="single" (onSort)="onSort()">
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        {{col.header}}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+    <tr>
+      <td *ngIf="rowGroupMetadata[rowData.date].index === rowIndex" [attr.rowspan]="rowGroupMetadata[rowData.date].size">
+        {{rowData.date}}
+      </td>
+      <td>{{rowData.name}}</td>
+      <td>{{rowData.lection}}</td>
+      <td>{{rowData.startTime}}</td>
+      <td>{{rowData.endTime}}</td>
+    </tr>
+  </ng-template>
+</p-table>

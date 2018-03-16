@@ -11,13 +11,15 @@ import {CourseMainDto} from '../../entity/CourseMainDto';
 import {Router} from '@angular/router';
 import {SelectedItemDto} from'../../entity/SelectedItemDto';
 import {SelectItem} from 'primeng/api';
+import {Message} from 'primeng/components/common/api';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 
 @Component({
   selector: 'app-mode',
   templateUrl: './mode.component.html',
   styleUrls: ['./mode.component.css'],
-  providers: [HttpService]
+  providers: [HttpService, MessageService]
 })
 export class CourseModeComponent implements OnInit {
 
@@ -36,25 +38,25 @@ export class CourseModeComponent implements OnInit {
   cols:any[];
   lecturers: SelectItem[] =[];
   selectedLecturer: SelectItem;
+  msgs: Message[] = [];
 
-  constructor(private activateRoute: ActivatedRoute, private http: HttpService, private router: Router) { 
+  constructor(private activateRoute: ActivatedRoute, private http: HttpService, private router: Router, private messageService: MessageService) { 
   	activateRoute.queryParams.subscribe(params=> {
   		this.id=params['id'];
   		this.mode=params['mode']; 
-      this.lecturerService.getAll().subscribe(data => {
+      this.lecturerService.getDictionary().subscribe(data => {
       data.map(lecturer => {
         this.lecturers.push({label:lecturer.name,value:lecturer.id});
       });
-      
     });
       if(this.id>0) {
         this.reloadItems();
       }
        this.cols = [
-            { field: 'id', header: 'Id' },
-            { field: 'name', header: 'Leciton name' },
-            { field: 'pair', header: 'Pair name' }
-        ];
+{ field: 'id', header: 'Id', method: 'equals'},
+{ field: 'name', header: 'Leciton name', method: 'contains'},
+{ field: 'pair', header: 'Pair name', method: 'contains'}
+];
   	});
   }
 
@@ -69,10 +71,14 @@ export class CourseModeComponent implements OnInit {
     this.courseService.create(newCourse).subscribe(
   		data=> {
   			this.entity=data;
-        this.id=this.entity.id;
+        this.id=this.entity.id; 
+    this.messageService.add({severity:'success',summary:'Success on creation',detail:'Course created'});
         this.setViewMode();
         this.reloadItems();
-  		});
+  		},
+      error=> {
+    this.messageService.add({severity:'error',summary:'Error on creation',detail:'Something happened'});
+      });
   }
 
   updateCourse() {
@@ -97,7 +103,7 @@ export class CourseModeComponent implements OnInit {
           data => {
             this.courseLections=data;
           });   
-      this.lectionService.getLectionsWithoutCourse(this.id).subscribe(
+      this.lectionService.getLectionsWithoutCourse().subscribe(
           data => {
             this.lectionsWithoutCourse=data;
           });    
@@ -163,11 +169,11 @@ export class CourseModeComponent implements OnInit {
     }
 
     isCourseLectionsSelected():boolean {
-      return !(this.selectedCourseLections.length>0);
+      return this.selectedCourseLections.length>0;
     }
 
     isLectionsWithoutCourseSelected():boolean {
-      return !(this.selectedLectionsWithoutCourse.length>0);
+      return this.selectedLectionsWithoutCourse.length>0;
     }
 
     applyChanges() {

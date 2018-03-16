@@ -7,6 +7,7 @@ import {LectionMainDto} from '../entity/LectionMainDto';
 import {CourseLectionDto} from '../entity/CourseLectionDto';
 import {LectionDto} from '../entity/LectionDto';
 import {LectionUpdateDto} from '../entity/LectionUpdateDto';
+import {DictionaryItem} from '../entity/DictionaryItem';
 
 
 export class LectionService implements SearchableService<LectionSearchParams,LectionMainDto> {
@@ -39,11 +40,14 @@ export class LectionService implements SearchableService<LectionSearchParams,Lec
 		return this.http.doGet(result);
 	}
 
-	getLectionsWithoutCourse(id: number): Observable<CourseLectionDto[]> {
+	getLectionsWithoutCourse(): Observable<CourseLectionDto[]> {
 		let result: string = this.url+"course/";
 		return this.http.doGet(result);
 	}
 
+	getDictionary():Observable<DictionaryItem[]> {
+		return this.http.doGet(this.url+"dictionary");
+	}
 	search(searchParams: LectionSearchParams, dataParams: DataTableParams): Observable<LectionMainDto[]> {
 		let result: string = this.url;
 		result+="search?limit="+dataParams.limit+"&sort="+dataParams.sortBy+"&offset="+dataParams.offset+"&asc="+dataParams.sortAsc;
