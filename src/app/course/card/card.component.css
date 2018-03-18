@@ -1,7 +1,6 @@
 .create-row {
 	padding-bottom: 0.7em;
 }
-
-input {
+input, textarea {
   width: 100%;
 }

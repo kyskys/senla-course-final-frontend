@@ -12,15 +12,16 @@ import {Router} from '@angular/router';
 import {SelectedItemDto} from'../../entity/SelectedItemDto';
 import {SelectItem} from 'primeng/api';
 import {Message} from 'primeng/components/common/api';
+import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 import {MessageService} from 'primeng/components/common/messageservice';
 
 
 @Component({
-  selector: 'app-mode',
-  templateUrl: './mode.component.html',
-  styleUrls: ['./mode.component.css'],
+  selector: 'app-card',
+  templateUrl: './card.component.html',
+  styleUrls: ['./card.component.css']
 })
-export class CourseModeComponent {
+export class CourseCardComponent {
 
 	courseService: CourseService = new CourseService(this.http);
   lectionService: LectionService = new LectionService(this.http);
@@ -30,16 +31,28 @@ export class CourseModeComponent {
   lectionsWithoutCourse: CourseLectionDto[];
   selectedLectionsWithoutCourse:CourseLectionDto[] =[];
 	id: number;
-	name: string;
-	description: string;
 	mode: string;
 	entity: CourseMainDto;
   cols:any[];
   lecturers: SelectItem[] =[];
   selectedLecturer: SelectItem;
   msgs: Message[] = [];
+  courseEditForm: FormGroup;
+  courseCreateForm: FormGroup;
 
-  constructor(private activateRoute: ActivatedRoute, private http: HttpService, private router: Router, private messageService: MessageService) { 
+ngOnInit() {
+     this.courseEditForm = this.formBuilder.group({
+            'name': new FormControl('', Validators.maxLength(45)),
+            'description': new FormControl('', Validators.maxLength(100)),
+            'lecturer' : new FormControl('')
+        });
+     this.courseCreateForm = this.formBuilder.group({
+            'name': new FormControl('', Validators.compose([Validators.maxLength(45),Validators.required])),
+            'description': new FormControl('', Validators.maxLength(100))
+        });
+  }
+
+  constructor(private activateRoute: ActivatedRoute, private formBuilder: FormBuilder, private http: HttpService, private router: Router, private messageService: MessageService) { 
   	activateRoute.queryParams.subscribe(params=> {
   		this.id=params['id'];
   		this.mode=params['mode']; 
@@ -61,27 +74,33 @@ export class CourseModeComponent {
   
   createCourse() {
   	let newCourse:CourseDto = new CourseDto();
-  	newCourse.name=this.name;
-  	newCourse.description=this.description;
+  	newCourse.name=this.courseCreateForm.value.name;
+  	newCourse.description=this.courseCreateForm.value.description;
     this.courseService.create(newCourse).subscribe(
   		data=> {
+        this.messageService.add({severity:'success',summary:'Success',detail:'Course created'});
   			this.entity=data;
         this.id=this.entity.id; 
-    this.messageService.add({severity:'success',summary:'Success on creation',detail:'Course created'});
         this.setViewMode();
         this.reloadItems();
   		},
       error=> {
-    this.messageService.add({severity:'error',summary:'Error on creation',detail:'Something happened'});
+        this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during create'});
       });
   }
 
   updateCourse() {
     let updateCourse:CourseUpdateDto = new CourseUpdateDto();
-    updateCourse.description=this.description;
-    updateCourse.name=this.name;
-    updateCourse.lecturer=Number(this.selectedLecturer);
-    this.courseService.update(updateCourse,this.id).subscribe(data => this.reloadItems());
+    updateCourse.description=this.courseEditForm.value.description;
+    updateCourse.name=this.courseEditForm.value.name;
+    updateCourse.lecturer=Number(this.courseEditForm.value.lecturer);
+    this.courseService.update(updateCourse,this.id).subscribe(data => {
+      this.messageService.add({severity:'success',summary:'Success',detail:'Course updated'});
+      this.reloadItems();
+    }, error => {
+      this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during update'});
+    });
+    
   }
 
   goToRegistry() {
@@ -91,8 +110,6 @@ export class CourseModeComponent {
   reloadItems() {
     this.courseService.get(this.id).subscribe(data => {
   		this.entity=data;
-       this.name='';
-        this.description='';
   	});
      this.lectionService.getLectionsByCourseId(this.id).subscribe(
           data => {
@@ -174,7 +191,12 @@ export class CourseModeComponent {
     applyChanges() {
       let array:number[] = [];
       this.courseLections.map(lection => array.push(lection.id));
-      return this.courseService.addLectionsToCourse(array,this.id).subscribe(data => this.reloadItems());
+      return this.courseService.addLectionsToCourse(array,this.id).subscribe(data => {
+        this.reloadItems();
+        this.messageService.add({severity:'success',summary:'Success',detail:'Course lections updated'});
+      }, error => {
+        this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during course lections update'});
+      });
     }
 
 }

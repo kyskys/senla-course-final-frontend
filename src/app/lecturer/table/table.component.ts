@@ -1,30 +1,26 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations } from '../../data-table';
 import {LecturerMainDto} from '../../entity/LecturerMainDto';
 import {HttpService} from '../../service/http.service';
+import {LecturerService} from '../../service/lecturer.service';
 import {LecturerSearchParams} from '../../search/params/LecturerSearchParams';
-import {LecturerSearchService} from '../../search/LecturerSearchService';
 
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
-  providers: [HttpService]
 })
-export class LecturerTableComponent implements OnInit {
+export class LecturerTableComponent {
 
     lecturers: LecturerMainDto[] = [];
-    service: LecturerSearchService = new LecturerSearchService(this.http);
+    service: LecturerService = new LecturerService(this.http);
     lecturerCount = 0;
 
     id: number;
     name: string;
     email:string;
     number: number;
-
-  ngOnInit() {
-  }
 	
 	getSearchParams(): LecturerSearchParams {
 		let result: LecturerSearchParams = new LecturerSearchParams;
@@ -38,7 +34,6 @@ export class LecturerTableComponent implements OnInit {
     @ViewChild(DataTable) lecturerTable;
 
     constructor(private http: HttpService) {
-        this.service.count(this.getSearchParams()).subscribe(count => this.lecturerCount=count);
     }
 
     reloadLecturers(dataParams) {

@@ -14,7 +14,7 @@
       <div class="col-md-2"></div>
       <div class="col-md-3">Name: {{getName()}}</div>
       <div class="col-md-4">
-        <input [(ngModel)]="name" placeholder="name..." [disabled]="isViewMode()">
+        <input pKeyFilter="alphanum" [(ngModel)]="name" placeholder="name..." [disabled]="isViewMode()">
       </div>
     </div>
     <div class="row create-row">

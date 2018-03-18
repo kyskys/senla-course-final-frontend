@@ -67,7 +67,6 @@ export class PairService implements SearchableService<PairSearchParams,PairMainD
 		if(searchParams.name!==undefined&&searchParams.name!=="") {
 			result+="&name="+searchParams.name;
 		}
-		console.log(result);
 		return this.http.doGet(result);
 	}
 

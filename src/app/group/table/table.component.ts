@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations } from '../../data-table';
 import {GroupMainDto} from '../../entity/GroupMainDto';
 import {HttpService} from '../../service/http.service';
 import {GroupSearchParams} from '../../search/params/GroupSearchParams';
 import {GroupService} from '../../service/group.service';
 import {Router} from '@angular/router';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css'],
-  providers: [HttpService]
+  styleUrls: ['./table.component.css']
 })
-export class GroupTableComponent implements OnInit {
+export class GroupTableComponent {
 
     groups: GroupMainDto[] = [];
     service: GroupService = new GroupService(this.http);
@@ -21,9 +21,6 @@ export class GroupTableComponent implements OnInit {
 
     id: number;
     name: string;
-
-  ngOnInit() {
-  }
 	
 	getSearchParams(): GroupSearchParams {
 		let result: GroupSearchParams = new GroupSearchParams;
@@ -34,8 +31,7 @@ export class GroupTableComponent implements OnInit {
 
     @ViewChild(DataTable) groupTable;
 
-    constructor(private http: HttpService, private router: Router) {
-        this.service.count(this.getSearchParams()).subscribe(count => this.groupCount=count);
+    constructor(private http: HttpService, private router: Router, private messageService: MessageService) {
     }
 
     reloadGroups(dataParams) {
@@ -57,7 +53,12 @@ export class GroupTableComponent implements OnInit {
 
     deleteGroup() {
       for (let Group of this.groupTable.selectedRows) {
-        this.service.delete(Group.item.id).subscribe(data => this.groupTable.reloadItems());
+        this.service.delete(Group.item.id).subscribe(data => {
+                this.messageService.add({severity:'success',summary:'Success', detail:'Groups deleted'});
+                this.groupTable.reloadItems();
+            }, error => {
+               this.messageService.add({severity:'error',summary:'Error during delete', detail:'Something happened...'});
+            });
       }
     }
 

@@ -1,7 +1,6 @@
 <div style="margin: auto; max-width: 1000px; margin-top:50px">
    <input [(ngModel)]="id" placeholder="id">
     	 <input [(ngModel)]="pair" placeholder="pair">
-    	  <input [(ngModel)]="student" placeholder="student">
     	 <button class="btn btn-default" (click) = "markTable.reloadItems();">Search</button>
     <data-table id="marks-grid"
         headerTitle="marks"
@@ -30,11 +29,6 @@
         <data-table-column
             [property]="'pair'"
             [header]="'Pair name'"
-            [sortable]="true">
-        </data-table-column>
-        <data-table-column
-            [property]="'student'"
-            [header]="'Student name'"
             [sortable]="true">
         </data-table-column>
         <data-table-column

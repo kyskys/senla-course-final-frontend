@@ -7,7 +7,7 @@
 <p-table #timetbl [columns]="cols" [value]="pairs" dataKey="id" sortField="date" sortMode="single" (onSort)="onSort()">
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+      <th *ngFor="let col of columns">
         {{col.header}}
       </th>
     </tr>

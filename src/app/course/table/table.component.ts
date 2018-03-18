@@ -1,20 +1,20 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations } from '../../data-table';
 import {CourseMainDto} from '../../entity/CourseMainDto';
 import {HttpService} from '../../service/http.service';
 import {CourseSearchParams} from '../../search/params/CourseSearchParams';
 import {CourseService} from '../../service/course.service';
 import {Router} from '@angular/router';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
-  providers: [HttpService]
 })
 
-export class CourseTableComponent implements OnInit {
+export class CourseTableComponent {
 
     courses: CourseMainDto[] = [];
     service: CourseService = new CourseService(this.http);
@@ -23,9 +23,6 @@ export class CourseTableComponent implements OnInit {
     id: number;
     name: string;
     lecturer: string;
-
-  ngOnInit() {
-  }
 	
 	getSearchParams(): CourseSearchParams {
 		let result: CourseSearchParams = new CourseSearchParams;
@@ -37,8 +34,7 @@ export class CourseTableComponent implements OnInit {
 
     @ViewChild(DataTable) courseTable;
 
-    constructor(private http: HttpService, private router: Router) {
-        this.service.count(this.getSearchParams()).subscribe(count => this.courseCount=count);
+    constructor(private http: HttpService, private router: Router, private messageService: MessageService) {
     }
 
     reloadCourses(dataParams) {
@@ -60,7 +56,12 @@ export class CourseTableComponent implements OnInit {
 
     deleteCourse() {
     	for (let course of this.courseTable.selectedRows) {
-    		this.service.delete(course.item.id).subscribe(data => this.courseTable.reloadItems());
+    		this.service.delete(course.item.id).subscribe(data => {
+                this.messageService.add({severity:'success',summary:'Success', detail:'Courses deleted'});
+                this.courseTable.reloadItems();
+            }, error => {
+               this.messageService.add({severity:'error',summary:'Error during delete', detail:'Something happened...'});
+            });
     	}
     }
 

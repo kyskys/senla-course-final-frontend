@@ -1,26 +1,35 @@
 <p-growl></p-growl>
 <div *ngIf="checkPageMode(); then edit else create"></div>
 <ng-template #edit>
-  <div class="container-fluid">
-    <h2>Edit group</h2>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-3">Name: {{getName()}}</div>
-      <div class="col-md-4">
-        <input [(ngModel)]="name" placeholder="name..." [disabled]="isViewMode()">
+  <form [formGroup]="groupEditForm">
+    <div class="container-fluid">
+      <h2>Edit group</h2>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3">Name: {{getName()}}</div>
+        <div class="col-md-4">
+          <input pInputText formControlName="name" placeholder="max 45 characters" [readonly]="isViewMode()">
+        </div>
+        <div class="col-md-3">
+          <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!groupEditForm.controls['name'].valid&&groupEditForm.controls['name'].dirty">
+            <i class="fa fa-close"></i>
+            <span *ngIf="groupEditForm.controls['name'].errors['maxlength']">Too much data</span>
+          </div>
+        </div>
+      </div>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+          <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">edit</button>
+          <button class="btn btn-default" type="submit" [disabled]="isViewMode()&&groupEditForm.valid" (click)="setViewMode(); updateGroup();">save</button>
+          <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
+        </div>
       </div>
     </div>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-2">
-        <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">edit</button>
-        <button class="btn btn-default" [disabled]="isViewMode()" (click)="setViewMode(); updateGroup();">save</button>
-        <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
-      </div>
-    </div>
-  </div>
+  </form>
   <h3>Group students</h3>
-  <p-table #groupst [columns]="cols" [value]="groupStudents" [(selection)]="selectedGroupStudents" dataKey="id" [paginator]="true" [rows]="10"> <ng-template pTemplate="header" let-columns>
+  <p-table #groupst [columns]="cols" [value]="groupStudents" [(selection)]="selectedGroupStudents" dataKey="id" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
       <tr>
         <th style="width: 2.25em">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
@@ -32,9 +41,9 @@
       </tr>
       <tr>
         <th style="width: 2.25em">
-       <th *ngFor="let col of columns"> 
-          <input pInputText type="text" (input)="groupst.filter($event.target.value, col.field,  col.method)">
-        </th>
+          <th *ngFor="let col of columns">
+            <input pInputText type="text" (input)="groupst.filter($event.target.value, col.field,  col.method)">
+          </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -60,7 +69,7 @@
     <p-button styleClass="ui-button-info" (click)="applyChanges();" label="Apply" style="font-size:1.5em"></p-button>
     <p-button styleClass="ui-button-info" (click)="removeStudentFromGroup();" [disabled]="!isGroupStudentsSelected()" icon="fa fa-angle-down" style="font-size:2em"></p-button>
   </div>
-  <h3>Available lections</h3>
+  <h3>Available students</h3>
   <p-table #availablest [columns]="cols" [value]="studentsWithoutGroup" [(selection)]="selectedStudentsWithoutGroup" dataKey="id" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -74,9 +83,9 @@
       </tr>
       <tr>
         <th style="width: 2.25em">
-       <th *ngFor="let col of columns"> 
-          <input pInputText type="text" (input)="availablest.filter($event.target.value, col.field,  col.method)">
-        </th>
+          <th *ngFor="let col of columns">
+            <input pInputText type="text" (input)="availablest.filter($event.target.value, col.field,  col.method)">
+          </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -92,28 +101,37 @@
     <ng-template pTemplate="summary">
       <ul>
         <li *ngFor="let student of selectedStudentsWithoutGroup" style="text-align: left">
-           {{student.id + ' - ' + student.name}}
+          {{student.id + ' - ' + student.name}}
         </li>
       </ul>
     </ng-template>
   </p-table>
 </ng-template>
 <ng-template #create>
+    <form [formGroup]="groupCreateForm">
   <div class="container-fluid">
     <h2>Create course</h2>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-4">
-        <input [(ngModel)]="name" placeholder="name...">
-        <br/>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+          <input pInputText formControlName="name" placeholder="max 45 characters">
+        </div>
+        <div class="col-md-3">
+          <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!groupCreateForm.controls['name'].valid&&groupCreateForm.controls['name'].dirty">
+            <i class="fa fa-close"></i>
+            <span *ngIf="groupCreateForm.controls['name'].errors['maxlength']">Too much data</span>
+            <span *ngIf="groupCreateForm.controls['name'].errors['required']">Name is required field</span>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-2">
-        <button class="btn btn-default" (click)="createGroup();">create</button>
-        <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+          <br/>
+          <button class="btn btn-default" type="submit" [disabled]="!groupCreateForm.valid" (click)="createGroup();">create</button>
+          <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
+        </div>
       </div>
-    </div>
   </div>
+    </form>
 </ng-template>

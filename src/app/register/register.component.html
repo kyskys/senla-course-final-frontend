@@ -1,17 +1,97 @@
-<div style="text-align: center;">
-<p>type name: *</p>
-  <input [(ngModel)]="name" placeholder="name...">{{nameMessage}}
-<p> type login: *</p>
-  <input [(ngModel)]="login" placeholder="login...">{{loginMessage}}
-<p> type password: * </p>
-  <input [(ngModel)]="password" placeholder="password...">{{passwordMessage}}
-<p> type phone number:</p>
-  <input [(ngModel)]="number" placeholder="+375 XX XXXXXXXX">{{phoneMessage}}
-<p> type email:</p>
-  <input [(ngModel)]="email" placeholder="test@example.com">{{emailMessage}}
-<p><input type="radio" name="role" (click)="role='student'" checked>Student<br/>
-<input type="radio" name="role" (click)="role='lecturer'">Lecturer</p>
-<button class="btn btn-default" (click)="register();">Войти</button>
-<p>{{registerMessage}}</p>
-{{role}}
-</div>
+<div class="position-page-center"><form [formGroup]="regform">
+    <p-panel header="Registration">
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Login *:
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="login" placeholder="3-16 characters"/>
+                </div>
+                <div class="ui-grid-col-6">
+                    <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!regform.controls['login'].valid&&regform.controls['login'].dirty">
+                        <i class="fa fa-close"></i>
+                        <span *ngIf="regform.controls['login'].errors['required']">Login is required field</span>
+                        <span *ngIf="regform.controls['login'].errors['pattern']||regform.controls['login'].errors['maxlength']">Invalid login</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Name *:
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="text" formControlName="name" placeholder="Name Surname"/>
+                </div>
+                <div class="ui-grid-col-6">
+                    <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!regform.controls['name'].valid&&regform.controls['name'].dirty">
+                        <i class="fa fa-close"></i>
+                        <span *ngIf="regform.controls['name'].errors['required']">Name is required field</span>
+                        <span *ngIf="regform.controls['name'].errors['pattern']">Invalid name</span>
+                        <span *ngIf="regform.controls['name'].errors['maxlength']">Too much data</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Password *:
+                </div>
+                <div class="ui-grid-col-4">
+                    <input pInputText type="password" formControlName="password" placeholder="Required"/>
+                </div>
+                <div class="ui-grid-col-6">
+                    <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!regform.controls['password'].valid&&regform.controls['password'].dirty">
+                        <i class="fa fa-close"></i>
+                        <span *ngIf="regform.controls['password'].errors['required']">Password is required</span>
+                        <span *ngIf="regform.controls['password'].errors['minlength']||regform.controls['password'].errors['maxlength']">Password length must be between 8 and 45 characters</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Phone number :
+                </div>
+                <div class="ui-grid-col-4">
+                    <p-inputMask formControlName="phone" mask="(99)999-99-99"></p-inputMask>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    E-mail :
+                </div>
+                <div class="ui-grid-col-4">
+                     <input pInputText type="text" formControlName="email"/>
+                </div>
+                 <div class="ui-grid-col-6">
+                    <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!regform.controls['email'].valid&&regform.controls['email'].dirty">
+                        <span *ngIf="regform.controls['password'].errors['pattern']">Invalid email</span>
+                        <span *ngIf="regform.controls['password'].errors['maxlength']">Too much data</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Role *:
+                </div>
+                <div class="ui-grid-col-4">
+                     <p-radioButton name="group1" value="lecturer" label="Lecturer" formControlName="role" inputId="rbtn1"></p-radioButton>
+                     <p-radioButton name="group1" value="student" label="Student" formControlName="role" inputId="rbtn2"></p-radioButton>
+                </div>
+            </div>
+            <div class="ui-grid-row" style="padding-top: 2em">
+                <div class="ui-grid-col-2"></div>
+                <div class="ui-grid-col-3">
+                    <button pButton type="submit" label="Submit" [disabled]="!regform.valid" (click)="register()"></button>
+                </div>
+                <div class="ui-grid-col-2"></div>
+                 <div class="ui-grid-col-3">
+                    <button pButton label="Log in" (click)="redirectToLogin()"></button>
+                </div>
+                <div class="ui-grid-col-2"></div>
+            </div>
+        </div>
+    </p-panel>
+</form>
+
+
+

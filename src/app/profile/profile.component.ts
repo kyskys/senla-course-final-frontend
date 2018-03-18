@@ -1,17 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {UserDetails} from '../entity/UserDetails';
 import {HttpService} from '../service/http.service';
-import {Msg} from '../entity/Msg';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-   providers: [
-  HttpService,
-  ]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
 
 	name: string;
 	email: string;
@@ -19,9 +15,6 @@ export class ProfileComponent implements OnInit {
 	details: UserDetails = new UserDetails();
   
   constructor(private service: HttpService) { }
-
-  ngOnInit() {
-  }
 
   getDetails() {
   this.service.doGet("http://localhost:8080/webapp/api/user/profile").subscribe(

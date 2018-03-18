@@ -1,47 +1,63 @@
 <div *ngIf="checkPageMode(); then edit else create"></div>
 <ng-template #edit>
-  <div class="container-fluid">
-    <h2>Edit lection</h2>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-3">Name: {{getName()}}</div>
-      <div class="col-md-4">
-        <input [(ngModel)]="name" placeholder="name..." [disabled]="isViewMode()">
+  <form [formGroup]="lectionEditForm">
+    <div class="container-fluid">
+      <h2>Edit lection</h2>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3">Name: {{getName()}}</div>
+        <div class="col-md-4">
+          <input [(ngModel)]="name" formControlName="name" placeholder="max 45 characters" [readonly]="isViewMode()">
+        </div>
+        <div class="col-md-3">
+          <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!lectionEditForm.controls['name'].valid&&lectionEditForm.controls['name'].dirty">
+            <i class="fa fa-close"></i>
+            <span *ngIf="lectionEditForm.controls['name'].errors['maxlength']">Too much data</span>
+          </div>
+        </div>
+      </div>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3">Course: {{getCourse()}}</div>
+        <div class="col-md-4">
+          <p-dropdown [options]="courses" formControlName="course" [readonly]="isViewMode()" [filter]="true"></p-dropdown>
+        </div>
+      </div>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+          <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">Edit</button>
+          <button class="btn btn-default" type="submit" [disabled]="isViewMode()&&lectionEditForm.valid" (click)="setViewMode(); updateLection();">Save</button>
+          <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
+        </div>
       </div>
     </div>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-3">Course: {{getCourse()}}</div>
-      <div class="col-md-4">
-        <p-dropdown [options]="courses" [(ngModel)]="selectedCourse" [disabled]="isViewMode()" [filter]="true"></p-dropdown>
-      </div>
-    </div>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-2">
-        <button class="btn btn-default" [disabled]="isEditMode()" (click)="setEditMode();">Edit</button>
-        <button class="btn btn-default" [disabled]="isViewMode()" (click)="setViewMode(); updateLection();">Save</button>
-        <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
-      </div>
-    </div>
-  </div>
+  </form>
 </ng-template>
 <ng-template #create>
-  <div class="container-fluid">
-    <h2>Create lection</h2>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-4">
-        <input [(ngModel)]="name" placeholder="name...">
-        <br/>
+  <form [formGroup]="lectionCreateForm">
+    <div class="container-fluid">
+      <h2>Create lection</h2>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+          <input formControlName="name" placeholder="max 45 characters">
+        </div>
+        <div class="col-md-3">
+          <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!lectionCreateForm.controls['name'].valid&&lectionCreateForm.controls['name'].dirty">
+            <i class="fa fa-close"></i>
+            <span *ngIf="lectionCreateForm.controls['name'].errors['maxlength']">Too much data</span>
+            <span *ngIf="lectionCreateForm.controls['name'].errors['required']">Name is required field</span>
+          </div>
+        </div>
+      </div>
+      <div class="row create-row">
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+          <button class="btn btn-default" type="submit" [disabled]="!lectionCreateForm.valid" (click)="createLection();">Create</button>
+          <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
+        </div>
       </div>
     </div>
-    <div class="row create-row">
-      <div class="col-md-2"></div>
-      <div class="col-md-2">
-        <button class="btn btn-default" (click)="createLection();">Create</button>
-        <button class="btn btn-warning" (click)="goToRegistry();">Back</button>
-      </div>
-    </div>
-  </div>
+  </form>
 </ng-template>

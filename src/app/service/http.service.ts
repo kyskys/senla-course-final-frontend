@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {AuthService} from './auth.service';
-import {Message} from '../entity/message';
 
 @Injectable()
 export class HttpService{
@@ -21,7 +20,7 @@ export class HttpService{
     }
 
     doGet(url: string):any {
-        return this.http.get(url, this.setAuthHeader());
+        return this.http.get(url, {observe: "body", headers: {'Auth': this.auth.getToken()}});
     }
 
     doPost(url: string, body:any):any {

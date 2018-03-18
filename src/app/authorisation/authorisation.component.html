@@ -1,6 +1,46 @@
-  <p> Введите логин:</p>
-  <input [(ngModel)]="login" placeholder="логин">
-  <p> Введите пароль:</p>
-  <input [(ngModel)]="password" placeholder="пароль">
-  <button class="btn btn-default" (click)="authorize();">Войти</button>
-  <p>{{message}}</p>
+<div class="position-page-center">
+  <form [formGroup]="loginform">
+    <p-panel header="Authorization">
+      <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+          <div class="ui-grid-col-2">
+            Login:
+          </div>
+          <div class="ui-grid-col-4">
+            <input pInputText type="text" formControlName="login" placeholder="Required" />
+          </div>
+          <div class="ui-grid-col-6">
+            <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!loginform.controls['login'].valid&&loginform.controls['login'].dirty">
+              <i class="fa fa-close"></i> Login is required field
+            </div>
+          </div>
+        </div>
+        <div class="ui-grid-row">
+          <div class="ui-grid-col-2">
+            Password:
+          </div>
+          <div class="ui-grid-col-4">
+            <input pInputText type="password" formControlName="password" placeholder="Required" />
+          </div>
+          <div class="ui-grid-col-6">
+            <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!loginform.controls['password'].valid&&loginform.controls['password'].dirty">
+              <i class="fa fa-close"></i>
+              <span *ngIf="loginform.controls['password'].errors['required']">Password is required</span>
+            </div>
+          </div>
+        </div>
+        <div class="ui-grid-row" style="padding-top: 2em">
+          <div class="ui-grid-col-2"></div>
+          <div class="ui-grid-col-3">
+            <button pButton type="submit" label="Login" [disabled]="!loginform.valid" (click)="authorize()"></button>
+          </div>
+          <div class="ui-grid-col-2"></div>
+          <div class="ui-grid-col-3">
+            <button pButton label="Register" (click)="redirectToRegister()"></button>
+          </div>
+          <div class="ui-grid-col-2"></div>
+        </div>
+      </div>
+    </p-panel>
+  </form>
+</div>

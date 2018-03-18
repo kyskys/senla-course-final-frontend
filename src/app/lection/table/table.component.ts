@@ -1,20 +1,20 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations } from '../../data-table';
 import {LectionMainDto} from '../../entity/LectionMainDto';
 import {HttpService} from '../../service/http.service';
 import {LectionSearchParams} from '../../search/params/LectionSearchParams';
 import {LectionService} from '../../service/lection.service';
 import {Router} from '@angular/router';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
-  providers: [HttpService]
 })
 
-export class LectionTableComponent implements OnInit {
+export class LectionTableComponent {
 
     lections: LectionMainDto[] = [];
     service: LectionService = new LectionService(this.http);
@@ -24,9 +24,6 @@ export class LectionTableComponent implements OnInit {
     name: string;
     pair: string;
     course: string;
-
-  ngOnInit() {
-  }
 	
 	getSearchParams(): LectionSearchParams {
 		let result: LectionSearchParams = new LectionSearchParams;
@@ -38,8 +35,7 @@ export class LectionTableComponent implements OnInit {
 
     @ViewChild(DataTable) lectionTable;
 
-    constructor(private http: HttpService, private router: Router) {
-        this.service.count(this.getSearchParams()).subscribe(count => this.lectionCount=count);
+    constructor(private http: HttpService, private router: Router, private messageService: MessageService) {
     }
 
     reloadLections(dataParams) {
@@ -61,7 +57,12 @@ export class LectionTableComponent implements OnInit {
 
     deleteLection() {
       for (let lection of this.lectionTable.selectedRows) {
-        this.service.delete(lection.item.id).subscribe(data => this.lectionTable.reloadItems());
+        this.service.delete(lection.item.id).subscribe(data => {
+                this.messageService.add({severity:'success',summary:'Success', detail:'Lections deleted'});
+                this.lectionTable.reloadItems();
+            }, error => {
+               this.messageService.add({severity:'error',summary:'Error during delete', detail:'Something happened...'});
+            });
       }
     }
 

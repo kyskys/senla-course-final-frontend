@@ -1,5 +1,3 @@
-import {Time} from '../entity/Time';
-
 export class PairMainDto {
 id: number;
 name: string;

@@ -63,7 +63,6 @@ export class LectionService implements SearchableService<LectionSearchParams,Lec
 		if(searchParams.name!==undefined&&searchParams.name!=="") {
 			result+="&name="+searchParams.name;
 		}
-		console.log(result);
 		return this.http.doGet(result);
 	}
 
@@ -85,7 +84,6 @@ export class LectionService implements SearchableService<LectionSearchParams,Lec
 		if(params.name!==undefined&&params.name!=="") {
 			result+=(first?"&":"?")+"name="+params.name;
 		}
-		console.log(result);
 		return this.http.doGet(result);
 	}
 }

@@ -17,11 +17,9 @@ import { CourseMainComponent } from './course.main/course.main.component';
 import { AppDataTableModule } from './data-table';
 import { CourseTableComponent } from './course/table/table.component';
 import { LectionTableComponent } from './lection/table/table.component';
-import { HeaderComponent } from './header/header.component';
 import { GroupTableComponent } from './group/table/table.component';
 import { LecturerTableComponent } from './lecturer/table/table.component';
 import { MarkTableComponent } from './mark/table/table.component';
-import { CourseModeComponent } from './course/mode/mode.component';
 import { LectionCardComponent } from './lection/card/card.component';
 import { GroupCardComponent } from './group/card/card.component';
 import {DropdownModule} from 'primeng/dropdown';
@@ -31,24 +29,29 @@ import { PairCardComponent } from './pair/card/card.component';
 import { PairTableComponent } from './pair/table/table.component';
 import {CalendarModule} from 'primeng/calendar';
 import {DialogModule} from 'primeng/dialog';
-import { CardComponent } from './card/card.component';
+import { CourseCardComponent } from './course/card/card.component';
 import { TimetableComponent } from './timetable/timetable.component';
+import {KeyFilterModule} from 'primeng/keyfilter';
+import { ReactiveFormsModule } from '@angular/forms';
+import {PanelModule} from 'primeng/panel';
+import {InputMaskModule} from 'primeng/inputmask';
+import {RadioButtonModule} from 'primeng/radiobutton';
 
 const routes: Routes =[
     { path: '', component: AuthorisationComponent},
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-    { path: 'register', component: RegisterComponent, canActivate: [AuthGuard]},
+    { path: 'register', component: RegisterComponent},
     {path: 'courses', component: CourseTableComponent, canActivate: [AuthGuard]},
     {path: 'lections', component: LectionTableComponent, canActivate: [AuthGuard]},
     {path: 'groups', component: GroupTableComponent, canActivate: [AuthGuard]},
     {path: 'pairs', component: PairTableComponent, canActivate: [AuthGuard]},
     {path: 'lecturer', component: LecturerTableComponent, canActivate: [AuthGuard]},
-    //{path: 'marks', component: MarkTableComponent, canActivate: [AuthGuard]},
-    {path: 'course',component: CourseModeComponent, canActivate: [AuthGuard, CardGuard]},
+    {path: 'course',component: CourseCardComponent, canActivate: [AuthGuard, CardGuard]},
     {path: 'lection',component: LectionCardComponent, canActivate: [AuthGuard, CardGuard]},
     {path: 'group',component: GroupCardComponent, canActivate: [AuthGuard, CardGuard]},
     {path: 'pair',component: PairCardComponent, canActivate: [AuthGuard, CardGuard]},
     {path: 'timetable',component: TimetableComponent, canActivate: [AuthGuard]},
+    {path: 'marks',component: MarkTableComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
@@ -60,19 +63,22 @@ const routes: Routes =[
     CourseMainComponent,
     CourseTableComponent,
     LectionTableComponent,
-    HeaderComponent,
     GroupTableComponent,
     LecturerTableComponent,
     MarkTableComponent,
-    CourseModeComponent,
     LectionCardComponent,
     GroupCardComponent,
     PairCardComponent,
     PairTableComponent,
-    CardComponent,
+    CourseCardComponent,
     TimetableComponent,
   ],
   imports: [
+    RadioButtonModule,
+    InputMaskModule,
+    PanelModule,
+    ReactiveFormsModule,
+    KeyFilterModule,
     DialogModule,
     CalendarModule,
     GrowlModule,

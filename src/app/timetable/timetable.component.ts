@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import * as moment from 'moment';
 import {PairGetDto} from '../entity/PairGetDto';
 import {PairMainDto} from '../entity/PairMainDto';
@@ -16,7 +16,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
   styleUrls: ['./timetable.component.css'],
   providers: [HttpService, MessageService]
 })
-export class TimetableComponent implements OnInit {
+export class TimetableComponent {
 
 pairService = new PairService(this.http);
 groupService = new GroupService(this.http);
@@ -42,9 +42,6 @@ rowGroupMetadata: any;
         this.groups.push({label:group.name,value:group.id});
       });
     });
-  }
-
-  ngOnInit() {
   }
 
   generateDays() {

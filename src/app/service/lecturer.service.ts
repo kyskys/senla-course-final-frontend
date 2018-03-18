@@ -21,18 +21,9 @@ export class LecturerService implements SearchableService<LecturerSearchParams,L
 		return this.http.doGet(resultUrl);
 	}
 
-//	create(entity: LecturerDto):Observable<LecturerMainDto> {
-//		return this.http.doPut(this.url,entity);
-//	}
-
-
 	delete(id: number):Observable<any> {
 		return this.http.doDelete(this.url+id);
 	}
-
-//	update(entity:LecturerUpdateDto, id:number):Observable<any> {
-//		return this.http.doPost(this.url+id,entity);
-//	}
 
 	getAll():Observable<LecturerMainDto[]> {
 		return this.http.doGet(this.url);

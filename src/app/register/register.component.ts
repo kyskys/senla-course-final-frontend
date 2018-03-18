@@ -2,45 +2,66 @@ import { Component, OnInit } from '@angular/core';
 import {HttpService} from '../service/http.service';
 import {Router} from '@angular/router';
 import {User} from '../entity/User';
+import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
+import {MessageService} from 'primeng/components/common/messageservice';
+import { Response } from '@angular/http';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  providers:[HttpService]
 })
 export class RegisterComponent implements OnInit {
 
-	name:string;
-	login:string;
-	email:string;
-	password:string;
-	number:number;
-	role:string = "student";
-	message:string;
-	nameMessage:string;
-	loginMessage:string;
-	emailMessage:string;
-	passwordMessage:string;
-	phoneMessage:string;
+	namepat: RegExp = /^[A-Za-z]+ [A-Za-z]+$/;
+	loginpat: RegExp = /^[A-Za-z0-9]{3,16}$/;
+	emailpat: RegExp = /^$|^\w+@\w+\.\w+$/;
+	regform: FormGroup;
+  submitted: boolean;
+
+  constructor(private service: HttpService, private router: Router, private messageService: MessageService, private formBuilder: FormBuilder) { 
+  }
+
+	ngOnInit() {
+		this.regform = this.formBuilder.group({
+			'name': new FormControl('', Validators.compose([Validators.required,Validators.maxLength(45), Validators.pattern(this.namepat)])),
+            'login': new FormControl('', Validators.compose([Validators.required,Validators.pattern(this.loginpat)])),
+            'password': new FormControl('', Validators.compose([Validators.required, Validators.minLength(8),Validators.maxLength(45)])),
+            'phone': new FormControl(''),
+            'email': new FormControl('',Validators.compose([Validators.maxLength(45),Validators.pattern(this.emailpat)])),
+            'role': new FormControl('student')
+        });
+	}
 
 	getUser(): User {
 		let user: User = new User();
-		user.email=this.email;
-		user.name=this.name;
-		user.password=this.password;
-		user.number=this.number;
-		user.login=this.login;
+		user.email=this.regform.value.email;
+		user.name=this.regform.value.name;
+		user.password=this.regform.value.password;
+		user.number=this.regform.value.phone;
+		user.login=this.regform.value.login;
+    user.role=this.regform.value.role;
 		return user;
 	}
 
-  constructor(private service: HttpService, private router: Router) { 
-  }
-
-  ngOnInit() {
+ redirectToLogin() {
+      this.router.navigate(['']);
   }
 
   register() {
  let user: User = this.getUser();
-  	this.service.doPost("http://localhost:8080/webapp/register/"+this.role, user).subscribe();
+  	this.service.doPost("http://localhost:8080/webapp/user/register", user).subscribe(
+  		data => {
+        if(data.code===3003) {
+          this.messageService.add({severity:'warn',summary:'Warning',detail:'Login already exist'});
+        } else if(data.code===3002) {
+          this.messageService.add({severity:'success',summary:'Successfully registered',detail:'Login with your data'});
+      this.redirectToLogin();
+        } else if(data.code==3004) {
+          this.messageService.add({severity:'error',summary:'Error',detail:'Invalid input'});
+        }
+  	},error => {
+  		this.messageService.add({severity:'error',summary:'Error during registration', detail:'Something happened...'});
+  	});
   }
 }

@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import {AuthService} from './service/auth.service';
 import {HttpService} from './service/http.service';
 import {Router} from '@angular/router';
-import {Message} from 'primeng/components/common/api';
+import {MessageService} from 'primeng/components/common/messageservice';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [AuthService, HttpService]
+  providers: [AuthService, HttpService, MessageService]
 })
 
 
@@ -45,16 +46,16 @@ export class AppComponent {
   	this.route.navigate(['lecturer']);
   }
 
-  goToMark() {
-  	this.route.navigate(['marks']);
-  }
-
   goToPair() {
     this.route.navigate(['pairs']);
   }
 
   goToTimetable() {
     this.route.navigate(['timetable']);
+  }
+
+  goToMarks() {
+    this.route.navigate(['marks']);
   }
 
   logout() {

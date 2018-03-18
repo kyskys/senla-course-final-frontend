@@ -16,13 +16,13 @@ import {SelectedItemDto} from'../../entity/SelectedItemDto';
 import {SelectItem} from 'primeng/api';
 import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 import * as moment from 'moment';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css'],
-  providers: [MessageService]
+  styleUrls: ['./card.component.css']
 })
 export class PairCardComponent implements OnInit {
 
@@ -40,11 +40,8 @@ export class PairCardComponent implements OnInit {
 	marks: MarkMainDto[];
   selectedMarks: MarkMainDto[] = [];
   lections: SelectItem[] =[];
-  selectedLection: SelectItem;
   students: SelectItem[] =[];
-  selectedStudent: SelectItem;
   pairTimes: SelectItem[] = [];
-  selectedPairTime: SelectItem;
   markCols:any[];
   groupCols:any[];
   displayModal = false;
@@ -54,8 +51,30 @@ export class PairCardComponent implements OnInit {
   groupWithoutPairs: GroupMainDto[];
   selectedGroupWithoutPairs:GroupMainDto[] =[];
   markTableDisplaying = false;
+  pairEditForm: FormGroup;
+  pairCreateForm: FormGroup;
+  markForm: FormGroup;
 
-  constructor(private activateRoute: ActivatedRoute, private http: HttpService, private router: Router, private messageService: MessageService) { 
+ngOnInit() {
+     this.pairEditForm = this.formBuilder.group({
+            'name': new FormControl('', Validators.maxLength(45)),
+            'lection': new FormControl(''),
+            'date' : new FormControl(''),
+            'time' : new FormControl(''),
+        });
+     this.pairCreateForm = this.formBuilder.group({
+            'name': new FormControl('', Validators.compose([Validators.maxLength(45),Validators.required])),
+            'lection': new FormControl('', Validators.required),
+            'date': new FormControl('', Validators.required),
+            'time': new FormControl('', Validators.required)
+        });
+     this.markForm = this.formBuilder.group({
+            'student': new FormControl('', Validators.required),
+            'mark': new FormControl('', Validators.required)
+        });
+  }
+
+  constructor(private activateRoute: ActivatedRoute, private formBuilder: FormBuilder, private http: HttpService, private router: Router, private messageService: MessageService) { 
   	activateRoute.queryParams.subscribe(params=> {
       this.id=params['id'];
       this.mode=params['mode'];
@@ -89,15 +108,10 @@ export class PairCardComponent implements OnInit {
         ]
   	});
   }
-
-  ngOnInit() {
-    
-  }
   
   reloadItems() {
     this.pairService.get(this.id).subscribe(data => {
       this.entity=data;
-      this.name='';
     });
     this.groupService.getGroupsByPairId(this.id).subscribe(
           data => {
@@ -138,33 +152,56 @@ export class PairCardComponent implements OnInit {
     applyChanges() {
       let array:number[] = [];
       this.groupPairs.map(group => array.push(group.id));
-      return this.pairService.addGroupsToPair(array,this.id).subscribe(data => this.reloadItems());
+      return this.pairService.addGroupsToPair(array,this.id).subscribe(data => {
+        this.reloadItems();
+        this.messageService.add({severity:'success',summary:'Success',detail:'Pair groups updated'});
+      }, error => {
+        this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during pair groups update'});
+    });
     }
 
   createPair() {
     let newPair:PairDto = new PairDto;
-    newPair.date=moment(this.date).format("DD/MM/YYYY");
-    newPair.lection=Number(this.selectedLection);
-    newPair.time=Number(this.selectedPairTime);
-    newPair.name=this.name;
+    newPair.date=moment(this.pairCreateForm.value.date).format("DD/MM/YYYY");
+    newPair.lection=Number(this.pairCreateForm.value.lection);
+    newPair.time=Number(this.pairCreateForm.value.time);
+    newPair.name=this.pairCreateForm.value.name;
     this.pairService.create(newPair).subscribe(
       data => {
+        this.messageService.add({severity:'success',summary:'Success',detail:'Pair created'});
         this.entity=data;
         this.id=this.entity.id;
-        this.messageService.add({severity:'success',summary:'Success on creation',detail:'Pair created'});
         this.setViewMode();
         this.reloadItems();
       },
       error=> {
-    this.messageService.add({severity:'error',summary:'Error on creation',detail:'Something happened'});
+    this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during create'});
+      });
+  }
+
+  updatePair() {
+    let newPair:PairDto = new PairDto;
+     newPair.date=moment(this.pairEditForm.value.date).format("DD/MM/YYYY");
+    newPair.lection=Number(this.pairEditForm.value.lection);
+    newPair.time=Number(this.pairEditForm.value.time);
+    newPair.name=this.pairEditForm.value.name;
+    this.pairService.update(newPair,this.id).subscribe(
+      data => {
+        this.messageService.add({severity:'success',summary:'Success',detail:'Pair created'});
+        this.entity=data;
+        this.setViewMode();
+        this.reloadItems();
+      },
+      error=> {
+    this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during create'});
       });
   }
 
   createMark() {
   	let newMark:MarkDto = new MarkDto();
     newMark.pair=this.id;
-    newMark.student=Number(this.selectedStudent);
-    newMark.mark=this.mark;
+    newMark.mark=this.markForm.value.mark;
+    newMark.student=this.markForm.value.student;
     this.markService.create(newMark).subscribe(
   		data=> {
         this.messageService.add({severity:'success',summary:'Success on creation',detail:'Mark created'});
@@ -178,7 +215,7 @@ export class PairCardComponent implements OnInit {
   updateMark() {
     let updateMark:MarkDto = new MarkDto();
     updateMark.pair=this.id;
-    updateMark.mark=this.mark;
+    updateMark.mark=this.markForm.value.mark;
     this.markService.update(updateMark,this.selectedMarks[0].id).subscribe(data => {
       this.messageService.add({severity:'success',summary:'Success on editing',detail:'Mark edited'});
         this.reloadMarkItems();
@@ -253,10 +290,12 @@ isViewMode():boolean{
 
   setMarkEditMode() {
   	this.markMode="edit";
+    this.markForm.controls['student'].clearValidators;
   }
 
   setMarkCreateMode() {
     this.markMode="create";
+    this.markForm.controls['student'].setValidators(Validators.required);
   }
 
   getPair():string {

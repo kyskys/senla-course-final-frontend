@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations } from '../../data-table';
 import {PairGetDto} from '../../entity/PairGetDto';
 import {PairMainDto} from '../../entity/PairMainDto';
@@ -7,15 +7,15 @@ import {PairSearchParams} from '../../search/params/PairSearchParams';
 import {PairService} from '../../service/pair.service';
 import {Router} from '@angular/router';
 import * as moment from 'moment';
+import {MessageService} from 'primeng/components/common/messageservice';
 
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
-  providers: [HttpService]
 })
-export class PairTableComponent implements OnInit {
+export class PairTableComponent {
 
     pairs: PairMainDto[] = [];
     service: PairService = new PairService(this.http);
@@ -25,9 +25,6 @@ export class PairTableComponent implements OnInit {
     name: string;
     lection: string;
     date: Date;
-
-  ngOnInit() {
-  }
 	
 	getSearchParams(): PairSearchParams {
 		let result: PairSearchParams = new PairSearchParams;
@@ -40,7 +37,7 @@ export class PairTableComponent implements OnInit {
 
     @ViewChild(DataTable) pairTable;
 
-    constructor(private http: HttpService, private router: Router) {
+    constructor(private http: HttpService, private router: Router, private messageService: MessageService) {
         this.service.count(this.getSearchParams()).subscribe(count => this.pairCount=count);
     }
 
@@ -74,9 +71,14 @@ export class PairTableComponent implements OnInit {
     }
 
     deletePair() {
-      for (let Pair of this.pairTable.selectedRows) {
-        this.service.delete(Pair.item.id).subscribe(data => this.pairTable.reloadItems());
-      }
+      for (let pair of this.pairTable.selectedRows) {
+        this.service.delete(pair.item.id).subscribe(data => {
+                this.messageService.add({severity:'success',summary:'Success', detail:'Pairs deleted'});
+                this.pairTable.reloadItems();
+            }, error => {
+               this.messageService.add({severity:'error',summary:'Error during delete', detail:'Something happened...'});
+            });
+        }
     }
 
     isOneSelected():boolean {

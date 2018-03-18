@@ -1,6 +1,6 @@
-<p-growl [(value)]="msgs"></p-growl>
+<p-growl></p-growl>
 <div *ngIf="isVisible(); then head else login"></div>
-<ng-template #login>Please login</ng-template>
+<ng-template #login></ng-template>
 <ng-template #head>
 	<div class = "container-fluid">
 		<div class= "row app-button-row app-header">
@@ -24,9 +24,9 @@
 				<a (click)="goToLection();">Lections</a> |
 				<a (click)="goToGroup();">Groups</a> |
 				<a (click)="goToLecturer();">Lecturers</a> |
-				<a (click)="goToMark();">Marks</a> |
 				<a (click)="goToPair();">Pairs</a> |
-				<a (click)="goToTimetable();">Timetable</a>
+				<a (click)="goToTimetable();">Timetable</a> |
+				<a (click)="goToMarks();">Marks</a>
 			</div>
 		</div>
 	</div>

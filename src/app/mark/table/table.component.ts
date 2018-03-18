@@ -1,26 +1,24 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations } from '../../data-table';
-import {MarkMainDto} from '../../entity/MarkMainDto';
+import {MarkStudentDto} from '../../entity/MarkStudentDto';
 import {HttpService} from '../../service/http.service';
+import {MarkService} from '../../service/mark.service';
 import {MarkSearchParams} from '../../search/params/MarkSearchParams';
-import {MarkSearchService} from '../../search/MarkSearchService';
 
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
-  providers: [HttpService]
 })
 export class MarkTableComponent implements OnInit {
 
-    marks: MarkMainDto[] = [];
-    service: MarkSearchService = new MarkSearchService(this.http);
+    marks: MarkStudentDto[] = [];
+    service: MarkService = new MarkService(this.http);
     markCount = 0;
 
     id: number;
     pair: string;
-    student: string;
 
   ngOnInit() {
   }
@@ -29,7 +27,6 @@ export class MarkTableComponent implements OnInit {
 		let result: MarkSearchParams = new MarkSearchParams;
 		result.id=this.id;
 		result.pair=this.pair;
-		result.student=this.student;
 		return result;
 	}
 
@@ -40,8 +37,8 @@ export class MarkTableComponent implements OnInit {
     }
 
     reloadMarks(dataParams) {
-        this.service.search(this.getSearchParams(), dataParams).subscribe(data => this.marks=data);
-        this.service.count(this.getSearchParams()).subscribe(count => this.markCount=count);
+        this.service.getMarksByCurrentStudent(this.getSearchParams(), dataParams).subscribe(data => this.marks=data);
+        this.service.getMarksCountByCurrentStudent(this.getSearchParams()).subscribe(count => this.markCount=count);
     }
 
     // special params:

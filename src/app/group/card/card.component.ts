@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../service/http.service';
-import {GroupService} from '../../service/group.service';
+import {GroupService } from '../../service/group.service';
 import {StudentService} from '../../service/student.service';
 import {LecturerService} from '../../service/lecturer.service';
 import {GroupDto} from '../../entity/GroupDto';
@@ -11,14 +11,14 @@ import {Router} from '@angular/router';
 import {SelectedItemDto} from'../../entity/SelectedItemDto';
 import {SelectItem} from 'primeng/api';
 import {Message} from 'primeng/components/common/api';
+import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 import {MessageService} from 'primeng/components/common/messageservice';
 
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css'],
-  providers: [HttpService, MessageService]
+  styleUrls: ['./card.component.css']
 })
 export class GroupCardComponent implements OnInit {
 
@@ -30,13 +30,22 @@ export class GroupCardComponent implements OnInit {
   studentsWithoutGroup: GroupStudentDto[];
   selectedStudentsWithoutGroup:GroupStudentDto[] =[];
 	id: number;
-	name: string;
 	mode: string;
 	entity: GroupMainDto;
   cols:any[];
-  msgs: Message[] = [];
+  groupEditForm: FormGroup;
+  groupCreateForm: FormGroup;
 
-  constructor(private activateRoute: ActivatedRoute, private http: HttpService, private router: Router, private messageService: MessageService) { 
+  ngOnInit() {
+     this.groupEditForm = this.formBuilder.group({
+            'name': new FormControl('', Validators.maxLength(45))
+        });
+     this.groupCreateForm = this.formBuilder.group({
+            'name': new FormControl('', Validators.compose([Validators.maxLength(45),Validators.required]))
+        });
+  }
+
+  constructor(private activateRoute: ActivatedRoute, private formBuilder: FormBuilder, private http: HttpService, private router: Router, private messageService: MessageService) { 
   	activateRoute.queryParams.subscribe(params=> {
   		this.id=params['id'];
   		this.mode=params['mode']; 
@@ -51,32 +60,33 @@ export class GroupCardComponent implements OnInit {
         ];
   	});
   }
-
-  ngOnInit() {
-    
-  }
   
   createGroup() {
   	let newGroup:GroupDto = new GroupDto();
-  	newGroup.name=this.name;
+  	newGroup.name=this.groupCreateForm.value.name;
     this.groupService.create(newGroup).subscribe(
   		data=> {
+        this.messageService.add({severity:'success',summary:'Success', detail:'Group created'});
   			this.entity=data;
         this.id=this.entity.id; 
-    this.messageService.add({severity:'success',summary:'Success on creation',detail:'Group created'});
         this.setViewMode();
         this.reloadItems();
   		},
       error=> {
-    this.messageService.add({severity:'error',summary:'Error on creation',detail:'Something happened'});
+    this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during create'});
       });
   }
 
   updateGroup() {
     let updateGroup:GroupDto = new GroupDto();
-    updateGroup.name=this.name;
-    this.groupService.update(updateGroup,this.id).subscribe(data => this.reloadItems());
-  }
+    updateGroup.name=this.groupEditForm.value.name;
+     this.groupService.update(updateGroup,this.id).subscribe(data => {
+      this.messageService.add({severity:'success',summary:'Success',detail:'Group updated'});
+      this.reloadItems();
+      }, error => {
+    this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during update'});
+    });
+}
 
   goToRegistry() {
     this.router.navigate(['groups']);
@@ -85,7 +95,6 @@ export class GroupCardComponent implements OnInit {
   reloadItems() {
     this.groupService.get(this.id).subscribe(data => {
   		this.entity=data;
-       this.name='';
   	});
      this.studentService.getStudentsByGroupId(this.id).subscribe(
           data => {
@@ -159,7 +168,12 @@ export class GroupCardComponent implements OnInit {
     applyChanges() {
       let array:number[] = [];
       this.groupStudents.map(Student => array.push(Student.id));
-      return this.groupService.addStudentsToGroup(array,this.id).subscribe(data => this.reloadItems());
+      return this.groupService.addStudentsToGroup(array,this.id).subscribe(data => {
+        this.messageService.add({severity:'success',summary:'Success',detail:'Group students updated'});
+        this.reloadItems();
+      }, error => {
+        this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during group students update'});
+      });
     }
 
 }

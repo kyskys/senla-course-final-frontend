@@ -1,52 +1,62 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpService} from '../service/http.service';
+import {UserService} from '../service/user.service';
 import {AuthService} from '../service/auth.service';
 import {HttpParams,HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {UserCreds} from '../entity/UserCreds';
-import {Message} from '../entity/message';
-import {UserService} from '../search/UserService';
+import {TokenMessage} from '../entity/TokenMessage';
+import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
+import {MessageService} from 'primeng/components/common/messageservice';
+
 
 @Component({
   selector: 'app-authorisation',
   templateUrl: './authorisation.component.html',
   styleUrls: ['./authorisation.component.css'],
   providers: [
-  HttpService,AuthService
+  AuthService
   ]
 })
 export class AuthorisationComponent implements OnInit {
 
-
-	login:string;
-	password:string;
 	message:string;
-  codeMessage: Message = new Message();
+  codeMessage: TokenMessage = new TokenMessage();
   error:string;
   userService: UserService = new UserService(this.service);
+  loginform: FormGroup;
   
-  constructor(private service: HttpService, private router: Router,private auth:AuthService) {
+  constructor(private service: HttpService, private router: Router,private auth:AuthService, private messageService: MessageService, private formBuilder: FormBuilder) {
     this.auth.setToken('');
   }
 
   redirectToProfile() {
-  this.router.navigate(['courses']);
+  this.messageService.add({severity:'success',summary:'Successfully logined',detail:'Redirecting...'});
+      this.router.navigate(['courses']);
+  }
+
+  redirectToRegister() {
+    this.router.navigate(['register']);
   }
 
   ngOnInit() {
+    this.loginform = this.formBuilder.group({
+            'login': new FormControl('', Validators.required),
+            'password': new FormControl('', Validators.required)
+        });
   }
 
   getUser() :UserCreds  {
   	let user: UserCreds = new UserCreds();
-  	user.login=this.login;
-  	user.password=this.password;
+  	user.login=this.loginform.value.login;
+  	user.password=this.loginform.value.password;
     return user;
   }
   
   authorize() {
     let user: UserCreds = this.getUser();
   	this.service.doPost("http://localhost:8080/webapp/login", user).subscribe(
-      (msg:Message)=> {
+      (msg:TokenMessage)=> {
       this.codeMessage=msg;
       if(this.codeMessage.code==3000) {
       this.auth.setToken(this.codeMessage.token);
@@ -56,12 +66,12 @@ export class AuthorisationComponent implements OnInit {
       this.redirectToProfile();
       });
     } else if (this.codeMessage.code==3001) {
-      this.message="wrong password";
+      this.messageService.add({severity:'warning',summary:'Wrong password'});
     } else if (this.codeMessage.code=3002) {
-      this.message="no such login";
+      this.messageService.add({severity:'warning',summary:'No such login'});
     }
      },error => {
-       this.message=error;
+       this.messageService.add({severity:'error',summary:'Error during login', detail:'Something happened...'});
      }
      );
     
