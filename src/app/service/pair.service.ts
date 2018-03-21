@@ -21,7 +21,7 @@ export class PairService implements SearchableService<PairSearchParams,PairMainD
 	}
 
 	getAll():Observable<PairMainDto[]> {
-		return this.http.doGet(this.url);
+		return this.http.doGet(this.url+"all");
 	}
 
 	create(entity: PairDto):Observable<PairMainDto> {

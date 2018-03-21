@@ -2,14 +2,13 @@ import {RoleEnum} from '../entity/RoleEnum';
 
 export class RoleService {
 
-	admin: RoleEnum = RoleEnum.Admin;
-	lecturer: RoleEnum = RoleEnum.Lecturer;
-	student: RoleEnum = RoleEnum.Student;
+	admin: RoleEnum = RoleEnum.ADMIN;
+	lecturer: RoleEnum = RoleEnum.LECTURER;
+	student: RoleEnum = RoleEnum.STUDENT;
 	
 	constructor() {
 
 	}
-
 
 	hasRoles(roles:RoleEnum[]):boolean {
 		let currentRole = localStorage.getItem('role');

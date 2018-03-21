@@ -24,7 +24,6 @@ export class LectionTableComponent {
 
     id: number;
     name: string;
-    pair: string;
     course: string;
 	
 	getSearchParams(): LectionSearchParams {

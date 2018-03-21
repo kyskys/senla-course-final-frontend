@@ -9,7 +9,7 @@
           <div class="col-md-2"></div>
           <div class="col-md-3">Lecturer: {{getLecturer()}}</div>
           <div class="col-md-4">
-            <p-dropdown [options]="lecturers" formControlName="lecturer" [readonly]="isViewMode()&&roleService.hasRoles([roleService.admin()])" [filter]="true"></p-dropdown>
+            <p-dropdown [options]="lecturers" formControlName="lecturer" [readonly]="!(!isViewMode()&&roleService.hasRoles([roleService.admin]))" [filter]="true"></p-dropdown>
           </div>
         </div>
         <div class="row create-row">

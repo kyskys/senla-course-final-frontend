@@ -16,7 +16,6 @@ import {Message} from 'primeng/components/common/api';
 import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 import {MessageService} from 'primeng/components/common/messageservice';
 
-
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',

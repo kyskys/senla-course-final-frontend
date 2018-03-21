@@ -22,7 +22,7 @@ export class CourseService implements SearchableService<CourseSearchParams,Cours
 	}
 
 	getAll():Observable<CourseMainDto[]> {
-		return this.http.doGet(this.url);
+		return this.http.doGet(this.url+"all");
 	}
 	getDictionary():Observable<DictionaryItem[]> {
 		return this.http.doGet(this.url+"dictionary");

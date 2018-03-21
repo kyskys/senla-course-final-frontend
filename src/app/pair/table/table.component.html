@@ -2,7 +2,7 @@
    <input [(ngModel)]="id" placeholder="id">
     	 <input [(ngModel)]="name" placeholder="name">
     	  <input [(ngModel)]="lection" placeholder="lection">
-          <p-calendar [(ngModel)]="date"></p-calendar>  
+          <p-calendar [(ngModel)]="date" placeholder="date"></p-calendar>  
     	 <button class="btn btn-default" (click) = "pairTable.reloadItems();">Search</button>
          <button class="btn btn-default" (click) = "createPair();">Create</button><br/>
     <data-table id="pairs-grid"

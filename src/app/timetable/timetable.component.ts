@@ -19,6 +19,7 @@ import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 })
 export class TimetableComponent implements OnInit{
 
+
 pairService = new PairService(this.http);
 groupService = new GroupService(this.http);
 days: SelectItem[] = [];
@@ -52,21 +53,14 @@ timeform: FormGroup;
   }
 
   generateDays() {
-    let startDay = moment().startOf("isoWeek");
-    let endDay = moment().endOf("isoWeek");
-  	for (var i = 0; i <=4; i++) {
+    let dateWeek: any = "isoWeek";
+    let dateFormat: any = "DD/MM/YYYY";
+    let startDay = moment().startOf(dateWeek).add(35,'d');
+    let endDay = moment().endOf(dateWeek).add(35,'d');
+  	for (var i = 0; i <=8; i++) {
   		this.days.push(
-        {label:startDay.subtract(7,'d').format("DD/MM/YYYY")+" - "+endDay.subtract(7,'d').format("DD/MM/YYYY"),value:startDay.format("DD/MM/YYYY")});
+        {label:startDay.subtract(7,'d').format(dateFormat)+" - "+endDay.subtract(7,'d').format(dateFormat),value:startDay.format(dateFormat)});
     }
-    this.days.reverse();
-    startDay = moment().startOf("isoWeek");
-    endDay = moment().endOf("isoWeek");
-    this.days.push({label:startDay.format("DD/MM/YYYY")+" - "+endDay.format("DD/MM/YYYY"),value:startDay.format("DD/MM/YYYY")});
-    for (var i = 0; i <= 4; i++) {
-      this.days.push( 
-        {label:startDay.add(7,'d').format("DD/MM/YYYY")+" - "+endDay.add(7,'d').format("DD/MM/YYYY"),value:startDay.format("DD/MM/YYYY")});
-    }
-    this.days.reverse();
   }
 
   getTimetable() {

@@ -72,7 +72,7 @@ ngOnInit() {
         });
      this.markForm = this.formBuilder.group({
             'student': new FormControl('', Validators.required),
-            'mark': new FormControl('', Validators.required)
+            'mark': new FormControl('', Validators.compose([Validators.required, Validators.max(10)]))
         });
   }
 
@@ -183,7 +183,8 @@ ngOnInit() {
 
   updatePair() {
     let newPair:PairDto = new PairDto;
-     newPair.date=moment(this.pairEditForm.value.date).format("DD/MM/YYYY");
+    let date = moment(this.pairEditForm.value.date).format("DD/MM/YYYY");
+    newPair.date=date=="Invalid date"?null:date;
     newPair.lection=Number(this.pairEditForm.value.lection);
     newPair.time=Number(this.pairEditForm.value.time);
     newPair.name=this.pairEditForm.value.name;
@@ -195,7 +196,7 @@ ngOnInit() {
         this.reloadItems();
       },
       error=> {
-    this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during create'});
+    this.messageService.add({severity:'error',summary:'Error',detail:'Something happened during update'});
       });
   }
 
@@ -342,19 +343,19 @@ isViewMode():boolean{
     
 
     getName():string {
-    return this.entity===undefined?"":this.entity.name;
+    return this.entity==undefined?"":this.entity.name;
   }
 
   getLection():string {
-    return this.entity===undefined?"":this.entity.lection;
+    return this.entity==undefined?"":this.entity.lection;
   }
 
   getDate():string {
-    return this.entity===undefined?"":this.entity.date;
+    return this.entity==undefined?"":this.entity.date;
   }
 
   getPairTime(): string {
-    return this.entity===undefined?"":this.entity.startTime+" - "+this.entity.endTime;
+    return this.entity==undefined?"":this.entity.startTime+" - "+this.entity.endTime;
   }
 
   showMarkTable() {

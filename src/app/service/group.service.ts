@@ -21,7 +21,7 @@ export class GroupService implements SearchableService<GroupSearchParams,GroupMa
 	}
 
 	getAll():Observable<GroupMainDto[]> {
-		return this.http.doGet(this.url);
+		return this.http.doGet(this.url+"all");
 	}
 
 	create(entity: GroupDto):Observable<GroupMainDto> {

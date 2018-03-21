@@ -26,6 +26,9 @@ export class LectionService implements SearchableService<LectionSearchParams,Lec
 		return this.http.doPut(this.url,entity);
 	}
 
+	getAll():Observable<LectionMainDto[]> {
+		return this.http.doGet(this.url+"all");
+	}
 
 	delete(id: number):Observable<any> {
 		return this.http.doDelete(this.url+id);

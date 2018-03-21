@@ -21,7 +21,7 @@ export class MarkService implements SearchableService<MarkSearchParams,MarkMainD
 	}
 
 	getAll():Observable<MarkMainDto[]> {
-		return this.http.doGet(this.url);
+		return this.http.doGet(this.url+"all");
 	}
 
 	create(entity: MarkDto):Observable<MarkMainDto> {

@@ -26,7 +26,7 @@ export class LecturerService implements SearchableService<LecturerSearchParams,L
 	}
 
 	getAll():Observable<LecturerMainDto[]> {
-		return this.http.doGet(this.url);
+		return this.http.doGet(this.url+"all");
 	}
 
 	getDictionary():Observable<DictionaryItem[]> {
