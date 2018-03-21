@@ -6,6 +6,7 @@ import {GroupSearchParams} from '../../search/params/GroupSearchParams';
 import {GroupService} from '../../service/group.service';
 import {Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {RoleService} from '../../service/role.service';
 
 
 @Component({
@@ -15,6 +16,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 })
 export class GroupTableComponent {
 
+    roleService: RoleService = new RoleService();
     groups: GroupMainDto[] = [];
     service: GroupService = new GroupService(this.http);
     groupCount = 0;

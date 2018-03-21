@@ -2,7 +2,7 @@
    <input [(ngModel)]="id" placeholder="id">
     	 <input [(ngModel)]="name" placeholder="name">
     	 <button class="btn btn-default" (click) = "groupTable.reloadItems();">Search</button>
-         <button class="btn btn-default" (click) = "createGroup();">Create</button><br/>
+         <button *ngIf="roleService.hasRoles([roleService.admin])" class="btn btn-default" (click) = "createGroup();">Create</button><br/>
     <data-table id="groups-grid"
         headerTitle="groups"
         [items]="groups"
@@ -41,8 +41,9 @@
     <div *ngFor="let selected of groupTable.selectedRows">
         <span [textContent]="selected.item.name"></span>
     </div>
-    <button class="btn btn-default" (click) = "viewGroup();" [disabled]="!isOneSelected()">View</button>
+    <div *ngIf="roleService.hasRoles([roleService.admin])"><button class="btn btn-default" (click) = "viewGroup();" [disabled]="!isOneSelected()">View</button>
       <button class="btn btn-default" (click) = "editGroup();" [disabled]="!isOneSelected()">Edit</button>
       <button class="btn btn-default" (click) = "deleteGroup();" [disabled]="!isManySelected()">Delete</button>
+  </div>
   </div>
 </div>

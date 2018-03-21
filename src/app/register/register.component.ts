@@ -4,7 +4,8 @@ import {Router} from '@angular/router';
 import {User} from '../entity/User';
 import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 import {MessageService} from 'primeng/components/common/messageservice';
-import { Response } from '@angular/http';
+import {Md5} from 'ts-md5';
+import {PasswordEncoder} from '../util/PasswordEncoder';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,6 @@ export class RegisterComponent implements OnInit {
 	loginpat: RegExp = /^[A-Za-z0-9]{3,16}$/;
 	emailpat: RegExp = /^$|^\w+@\w+\.\w+$/;
 	regform: FormGroup;
-  submitted: boolean;
 
   constructor(private service: HttpService, private router: Router, private messageService: MessageService, private formBuilder: FormBuilder) { 
   }
@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
 		let user: User = new User();
 		user.email=this.regform.value.email;
 		user.name=this.regform.value.name;
-		user.password=this.regform.value.password;
+		user.password=PasswordEncoder.encodePassword(this.regform.value.password);
 		user.number=this.regform.value.phone;
 		user.login=this.regform.value.login;
     user.role=this.regform.value.role;
@@ -49,16 +49,15 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
- let user: User = this.getUser();
-  	this.service.doPost("http://localhost:8080/webapp/user/register", user).subscribe(
+   let user: User = this.getUser();
+
+  	this.service.doPost("http://localhost:8080/webapp/user/registrate", user).subscribe(
   		data => {
         if(data.code===3003) {
           this.messageService.add({severity:'warn',summary:'Warning',detail:'Login already exist'});
         } else if(data.code===3002) {
           this.messageService.add({severity:'success',summary:'Successfully registered',detail:'Login with your data'});
       this.redirectToLogin();
-        } else if(data.code==3004) {
-          this.messageService.add({severity:'error',summary:'Error',detail:'Invalid input'});
         }
   	},error => {
   		this.messageService.add({severity:'error',summary:'Error during registration', detail:'Something happened...'});

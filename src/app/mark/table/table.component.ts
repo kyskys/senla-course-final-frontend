@@ -4,6 +4,7 @@ import {MarkStudentDto} from '../../entity/MarkStudentDto';
 import {HttpService} from '../../service/http.service';
 import {MarkService} from '../../service/mark.service';
 import {MarkSearchParams} from '../../search/params/MarkSearchParams';
+import {RoleService} from '../../service/role.service';
 
 
 @Component({
@@ -13,6 +14,7 @@ import {MarkSearchParams} from '../../search/params/MarkSearchParams';
 })
 export class MarkTableComponent implements OnInit {
 
+    roleService: RoleService = new RoleService();
     marks: MarkStudentDto[] = [];
     service: MarkService = new MarkService(this.http);
     markCount = 0;
@@ -33,7 +35,6 @@ export class MarkTableComponent implements OnInit {
     @ViewChild(DataTable) markTable;
 
     constructor(private http: HttpService) {
-        this.service.count(this.getSearchParams()).subscribe(count => this.markCount=count);
     }
 
     reloadMarks(dataParams) {

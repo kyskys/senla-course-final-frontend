@@ -46,7 +46,7 @@ export class StudentService implements SearchableService<StudentSearchParams,Stu
 		if(searchParams.email!==undefined&&searchParams.email!=="") {
 			result+="&email="+searchParams.email;
 		}
-		if(searchParams.number!==undefined&&searchParams.number>0) {
+		if(searchParams.number!==undefined&&searchParams.number!=="") {
 			result+="&number="+searchParams.number;
 		}
 		if(searchParams.group!==undefined&&searchParams.group!=="") {
@@ -70,7 +70,7 @@ export class StudentService implements SearchableService<StudentSearchParams,Stu
 			result+=(first?"&":"?")+"email="+params.email;
 			first=true;
 		}
-		if(params.number!==undefined&&params.number>0) {
+		if(params.number!==undefined&&params.number!=="") {
 			result+=(first?"&":"?")+"number="+params.number;
 			first=true;
 		}

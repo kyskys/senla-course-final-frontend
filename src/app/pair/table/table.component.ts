@@ -8,6 +8,7 @@ import {PairService} from '../../service/pair.service';
 import {Router} from '@angular/router';
 import * as moment from 'moment';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {RoleService} from '../../service/role.service';
 
 
 @Component({
@@ -17,6 +18,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 })
 export class PairTableComponent {
 
+    roleService: RoleService = new RoleService();
     pairs: PairMainDto[] = [];
     service: PairService = new PairService(this.http);
     pairCount = 0;

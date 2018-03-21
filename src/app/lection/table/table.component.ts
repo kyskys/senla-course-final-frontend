@@ -6,6 +6,7 @@ import {LectionSearchParams} from '../../search/params/LectionSearchParams';
 import {LectionService} from '../../service/lection.service';
 import {Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {RoleService} from '../../service/role.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 
 export class LectionTableComponent {
 
+    roleService: RoleService = new RoleService();
     lections: LectionMainDto[] = [];
     service: LectionService = new LectionService(this.http);
     lectionCount = 0;

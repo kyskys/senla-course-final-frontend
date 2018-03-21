@@ -4,6 +4,7 @@ import {HttpService} from '../../service/http.service';
 import {CourseService} from '../../service/course.service';
 import {LectionService} from '../../service/lection.service';
 import {LecturerService} from '../../service/lecturer.service';
+import {RoleService} from '../../service/role.service';
 import {CourseDto} from '../../entity/CourseDto';
 import {CourseUpdateDto} from '../../entity/CourseUpdateDto';
 import {CourseLectionDto} from '../../entity/CourseLectionDto';
@@ -23,6 +24,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 })
 export class CourseCardComponent {
 
+  roleService: RoleService = new RoleService();
 	courseService: CourseService = new CourseService(this.http);
   lectionService: LectionService = new LectionService(this.http);
   lecturerService: LecturerService = new LecturerService(this.http);

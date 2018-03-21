@@ -2,6 +2,7 @@ import { Component, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations } from '../../data-table';
 import {CourseMainDto} from '../../entity/CourseMainDto';
 import {HttpService} from '../../service/http.service';
+import {RoleService} from '../../service/role.service';
 import {CourseSearchParams} from '../../search/params/CourseSearchParams';
 import {CourseService} from '../../service/course.service';
 import {Router} from '@angular/router';
@@ -16,6 +17,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 
 export class CourseTableComponent {
 
+    roleService: RoleService = new RoleService();
     courses: CourseMainDto[] = [];
     service: CourseService = new CourseService(this.http);
     courseCount = 0;

@@ -18,12 +18,5 @@ export class CardGuard implements CanActivate{
     		return true;
     	} 
     	return false;
-
-
-        	/*if (route.queryParams['mode']==='edit'&&route.queryParams['id']!==undefined) {
-        		return true;
-        	} else if(route.queryParams['mode']==='create'&&route.queryParams['id']==undefined) {
-        		return true;
-        	} else return false;*/
     }
 }

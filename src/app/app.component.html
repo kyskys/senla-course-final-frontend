@@ -20,13 +20,14 @@
 		<div class = "row app-nav">
 			<div class="col-md-2"></div>
 			<div class = "col-md-8">
-				<a (click)="goToCourse();">Courses</a> | 
-				<a (click)="goToLection();">Lections</a> |
-				<a (click)="goToGroup();">Groups</a> |
-				<a (click)="goToLecturer();">Lecturers</a> |
-				<a (click)="goToPair();">Pairs</a> |
-				<a (click)="goToTimetable();">Timetable</a> |
-				<a (click)="goToMarks();">Marks</a>
+				<a *ngIf="roleService.hasRoles([roleService.admin,roleService.lecturer])" (click)="goToCourse();">Courses |</a>
+				<a *ngIf="roleService.hasRoles([roleService.admin,roleService.lecturer])" (click)="goToLection();">Lections |</a>
+				<a *ngIf="roleService.hasRoles([roleService.admin,roleService.lecturer])" (click)="goToGroup();">Groups |</a>
+				<a *ngIf="roleService.hasRoles([roleService.admin]) "(click)="goToLecturer();">Lecturers |</a>
+				<a *ngIf="roleService.hasRoles([roleService.admin,roleService.lecturer])" (click)="goToStudent();">Students |</a>		
+				<a *ngIf="roleService.hasRoles([roleService.admin,roleService.lecturer])" (click)="goToPair();">Pairs |</a>
+				<a *ngIf="roleService.hasRoles([roleService.student])"(click)="goToMarks();">Marks |</a>
+				<a (click)="goToTimetable();">Timetable</a>
 			</div>
 		</div>
 	</div>

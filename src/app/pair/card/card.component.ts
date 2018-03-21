@@ -17,6 +17,7 @@ import {SelectItem} from 'primeng/api';
 import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
+import {RoleService} from '../../service/role.service';
 import * as moment from 'moment';
 
 @Component({
@@ -26,6 +27,7 @@ import * as moment from 'moment';
 })
 export class PairCardComponent implements OnInit {
 
+  roleService: RoleService = new RoleService();
   markService: MarkService = new MarkService(this.http);
   studentService: StudentService = new StudentService(this.http);
   pairService: PairService = new PairService(this.http);

@@ -1,9 +1,9 @@
 import { Component, ViewChild} from '@angular/core';
 import { DataTable, DataTableTranslations } from '../../data-table';
-import {LecturerMainDto} from '../../entity/LecturerMainDto';
+import {StudentMainDto} from '../../entity/StudentMainDto';
 import {HttpService} from '../../service/http.service';
-import {LecturerService} from '../../service/lecturer.service';
-import {LecturerSearchParams} from '../../search/params/LecturerSearchParams';
+import {StudentService} from '../../service/student.service';
+import {StudentSearchParams} from '../../search/params/StudentSearchParams';
 import {RoleService} from '../../service/role.service';
 
 
@@ -12,35 +12,37 @@ import {RoleService} from '../../service/role.service';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
-export class LecturerTableComponent {
+export class StudentTableComponent {
 
     roleService: RoleService = new RoleService();
-    lecturers: LecturerMainDto[] = [];
-    service: LecturerService = new LecturerService(this.http);
-    lecturerCount = 0;
+    students: StudentMainDto[] = [];
+    service: StudentService = new StudentService(this.http);
+    studentCount = 0;
 
     id: number;
     name: string;
     email:string;
-    number: number;
+    number: string;
+    group:string;
 	
-	getSearchParams(): LecturerSearchParams {
-		let result: LecturerSearchParams = new LecturerSearchParams;
+	getSearchParams(): StudentSearchParams {
+		let result: StudentSearchParams = new StudentSearchParams;
 		result.id=this.id;
 		result.email=this.email;
 		result.name=this.name;
 		result.number=this.number;
+		result.group=this.group;
 		return result;
 	}
 
-    @ViewChild(DataTable) lecturerTable;
+    @ViewChild(DataTable) studentTable;
 
     constructor(private http: HttpService) {
     }
 
-    reloadLecturers(dataParams) {
-        this.service.search(this.getSearchParams(), dataParams).subscribe(data => this.lecturers=data);
-        this.service.count(this.getSearchParams()).subscribe(count => this.lecturerCount=count);
+    reloadStudents(dataParams) {
+        this.service.search(this.getSearchParams(), dataParams).subscribe(data => this.students=data);
+        this.service.count(this.getSearchParams()).subscribe(count => this.studentCount=count);
     }
 
     // special params:

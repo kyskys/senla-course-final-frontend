@@ -11,6 +11,7 @@ import {SelectedItemDto} from'../../entity/SelectedItemDto';
 import {SelectItem} from 'primeng/api';
 import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {RoleService} from '../../service/role.service';
 
 @Component({
   selector: 'app-card',
@@ -18,7 +19,10 @@ import {MessageService} from 'primeng/components/common/messageservice';
   styleUrls: ['./card.component.css']
 })
 export class LectionCardComponent implements OnInit {
-courseService: CourseService = new CourseService(this.http);
+
+
+  roleService: RoleService = new RoleService();
+  courseService: CourseService = new CourseService(this.http);
   lectionService: LectionService = new LectionService(this.http);
   id: number;
 	mode: string;

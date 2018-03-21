@@ -11,7 +11,11 @@ import { ProfileComponent } from './profile/profile.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
 import { CardGuard } from './guard/card.guard';
+import { AdminGuard } from './guard/admin.guard';
+import { LecturerGuard } from './guard/lecturer.guard';
+import { StudentGuard } from './guard/student.guard';
 import { AuthService } from './service/auth.service';
+import { RoleService } from './service/role.service';
 import { RegisterComponent } from './register/register.component';
 import { CourseMainComponent } from './course.main/course.main.component';
 import { AppDataTableModule } from './data-table';
@@ -36,22 +40,24 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {PanelModule} from 'primeng/panel';
 import {InputMaskModule} from 'primeng/inputmask';
 import {RadioButtonModule} from 'primeng/radiobutton';
+import { StudentTableComponent } from './student/table/table.component';
 
 const routes: Routes =[
     { path: '', component: AuthorisationComponent},
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-    { path: 'register', component: RegisterComponent},
-    {path: 'courses', component: CourseTableComponent, canActivate: [AuthGuard]},
-    {path: 'lections', component: LectionTableComponent, canActivate: [AuthGuard]},
-    {path: 'groups', component: GroupTableComponent, canActivate: [AuthGuard]},
-    {path: 'pairs', component: PairTableComponent, canActivate: [AuthGuard]},
-    {path: 'lecturer', component: LecturerTableComponent, canActivate: [AuthGuard]},
+    { path: 'register', component: RegisterComponent,},
+    {path: 'courses', component: CourseTableComponent, canActivate: [AuthGuard, StudentGuard]},
+    {path: 'lections', component: LectionTableComponent, canActivate: [AuthGuard, StudentGuard]},
+    {path: 'groups', component: GroupTableComponent, canActivate: [AuthGuard,StudentGuard]},
+    {path: 'pairs', component: PairTableComponent, canActivate: [AuthGuard, StudentGuard]},
+    {path: 'lecturers', component: LecturerTableComponent, canActivate: [AuthGuard, StudentGuard,LecturerGuard]},
+    {path: 'students', component: StudentTableComponent, canActivate: [AuthGuard, StudentGuard]},
     {path: 'course',component: CourseCardComponent, canActivate: [AuthGuard, CardGuard]},
     {path: 'lection',component: LectionCardComponent, canActivate: [AuthGuard, CardGuard]},
     {path: 'group',component: GroupCardComponent, canActivate: [AuthGuard, CardGuard]},
     {path: 'pair',component: PairCardComponent, canActivate: [AuthGuard, CardGuard]},
     {path: 'timetable',component: TimetableComponent, canActivate: [AuthGuard]},
-    {path: 'marks',component: MarkTableComponent, canActivate: [AuthGuard]},
+    {path: 'marks',component: MarkTableComponent, canActivate: [AuthGuard, AdminGuard, LecturerGuard]},
 ];
 
 @NgModule({
@@ -72,6 +78,7 @@ const routes: Routes =[
     PairTableComponent,
     CourseCardComponent,
     TimetableComponent,
+    StudentTableComponent,
   ],
   imports: [
     RadioButtonModule,
@@ -93,7 +100,7 @@ const routes: Routes =[
     BrowserAnimationsModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [AuthGuard,AuthService,CardGuard],
+  providers: [AuthGuard,AuthService,RoleService,CardGuard,AdminGuard,LecturerGuard,StudentGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

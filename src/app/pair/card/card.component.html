@@ -1,3 +1,4 @@
+<div *ngIf="roleService.hasRoles([roleService.admin,roleService.lecturer])">
 <p-dialog [contentStyle]="{'overflow':'visible'}" [(visible)]="displayModal" [width]="500">
   <div *ngIf="!(isMarkEditMode()); then createmrk else editmrk"></div>
   <form [formGroup]="markForm">
@@ -134,7 +135,7 @@
           </th>
         </tr>
         <tr>
-          <th style="width: 2.25em">
+          <th style="width: 2.25em"></th>
             <th *ngFor="let col of columns">
               <input pInputText type="text" (input)="grpwithp.filter($event.target.value, col.field,  col.method)">
             </th>
@@ -176,7 +177,7 @@
           </th>
         </tr>
         <tr>
-          <th style="width: 2.25em">
+          <th style="width: 2.25em"></th>
             <th *ngFor="let col of columns">
               <input pInputText type="text" (input)="grpwithoutp.filter($event.target.value, col.field,  col.method)">
             </th>
@@ -269,3 +270,4 @@
     </form>
   </div>
 </ng-template>
+</div>

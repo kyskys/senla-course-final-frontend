@@ -13,6 +13,7 @@ import {SelectItem} from 'primeng/api';
 import {Message} from 'primeng/components/common/api';
 import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {RoleService} from '../../service/role.service';
 
 
 @Component({
@@ -22,6 +23,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 })
 export class GroupCardComponent implements OnInit {
 
+  roleService: RoleService = new RoleService();
 	groupService: GroupService = new GroupService(this.http);
   studentService: StudentService = new StudentService(this.http);
   lecturerService: LecturerService = new LecturerService(this.http);

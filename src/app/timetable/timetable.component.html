@@ -1,9 +1,11 @@
 <p-growl></p-growl>
+<form [formGroup]="timeform">
 <div class="timetable-header">
-  <p-dropdown [options]="days" [(ngModel)]="selectedDay" required="true" [filter]="true" placeholder="Select a date"></p-dropdown>
-  <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [filter]="true" placeholder="Select a group"></p-dropdown>
-  <button class="btn btn-default" (click)="getTimetable()">Show</button>
+  <p-dropdown [options]="days" formControlName="day" required="true" [filter]="true" placeholder="Select a date"></p-dropdown>
+  <p-dropdown [options]="groups" formControlName="group" [filter]="true" placeholder="Select a group"></p-dropdown>
+  <button class="btn btn-default" type="submit" [disabled]="!timeform.valid" (click)="getTimetable()">Show</button>
 </div>
+</form>
 <p-table #timetbl [columns]="cols" [value]="pairs" dataKey="id" sortField="date" sortMode="single" (onSort)="onSort()">
   <ng-template pTemplate="header" let-columns>
     <tr>

@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import {HttpService} from '../service/http.service';
 import {UserService} from '../service/user.service';
 import {AuthService} from '../service/auth.service';
+import {RoleService} from '../service/role.service';
 import {HttpParams,HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {UserCreds} from '../entity/UserCreds';
 import {TokenMessage} from '../entity/TokenMessage';
 import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {Md5} from 'ts-md5';
+import {PasswordEncoder} from '../util/PasswordEncoder';
 
 
 @Component({
@@ -49,7 +52,7 @@ export class AuthorisationComponent implements OnInit {
   getUser() :UserCreds  {
   	let user: UserCreds = new UserCreds();
   	user.login=this.loginform.value.login;
-  	user.password=this.loginform.value.password;
+  	user.password=PasswordEncoder.encodePassword(this.loginform.value.password);
     return user;
   }
   
@@ -63,7 +66,10 @@ export class AuthorisationComponent implements OnInit {
       this.userService.getCurrentUserName().subscribe(
       (data:any) => {
       localStorage.setItem('currentUser',data.name);
+      this.userService.loadRole().subscribe(data => {
+      localStorage.setItem('role',data.role);
       this.redirectToProfile();
+      });
       });
     } else if (this.codeMessage.code==3001) {
       this.messageService.add({severity:'warning',summary:'Wrong password'});

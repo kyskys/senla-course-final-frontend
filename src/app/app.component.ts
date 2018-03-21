@@ -3,7 +3,8 @@ import {AuthService} from './service/auth.service';
 import {HttpService} from './service/http.service';
 import {Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
-
+import {RoleService} from './service/role.service';
+import {RoleEnum} from './entity/RoleEnum';
 
 @Component({
   selector: 'app-root',
@@ -14,10 +15,12 @@ import {MessageService} from 'primeng/components/common/messageservice';
 
 
 export class AppComponent {
+  roleService: RoleService = new RoleService();
 
   isVisible(): boolean {
   	return this.auth.isAuthenticated();
   }
+
 	constructor(private auth: AuthService, private http: HttpService, private route: Router) {
 		
   	}
@@ -38,12 +41,16 @@ export class AppComponent {
   	this.route.navigate(['profile']);
   }
 
-   goToGroup() {
+  goToGroup() {
   	this.route.navigate(['groups']);
   }
 
-    goToLecturer() {
-  	this.route.navigate(['lecturer']);
+  goToLecturer() {
+  	this.route.navigate(['lecturers']);
+  }
+
+  goToStudent() {
+    this.route.navigate(['students']);
   }
 
   goToPair() {

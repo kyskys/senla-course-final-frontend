@@ -1,10 +1,49 @@
- <button class="btn btn-default" (click)="getDetails();">детали</button>
-<p>
-  	{{email}}
-</p>
-<p>
-	{{name}}
-</p>
-<p>
-	{{number}}
-</p>
+<div class="position-page-center">
+<form [formGroup]="detform">
+  <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4">
+        Name: {{getName()}}
+      </div>
+      <div class="ui-grid-col-4">
+        <input pInputText type="text" formControlName="name" placeholder="Name Surname" />
+      </div>
+      <div class="ui-grid-col-4">
+        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!detform.controls['name'].valid&&detform.controls['name'].dirty">
+          <i class="fa fa-close"></i>
+          <span *ngIf="detform.controls['name'].errors['pattern']">Invalid name</span>
+          <span *ngIf="detform.controls['name'].errors['maxlength']">Too much data</span>
+        </div>
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4">
+        Phone number: {{getNumber()}}
+      </div>
+      <div class="ui-grid-col-4">
+        <p-inputMask formControlName="phone" mask="(99)999-99-99"></p-inputMask>
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4">
+        E-mail: {{getEmail()}}
+      </div>
+      <div class="ui-grid-col-4">
+        <input pInputText type="text" formControlName="email" />
+      </div>
+      <div class="ui-grid-col-4">
+        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!detform.controls['email'].valid&&detform.controls['email'].dirty">
+          <span *ngIf="detform.controls['email'].errors['pattern']">Invalid email</span>
+          <span *ngIf="detform.controls['email'].errors['maxlength']">Too much data</span>
+        </div>
+      </div>
+    </div>
+    <div class="ui-grid-row" style="padding-top: 2em">
+      <div class="ui-grid-col-2"></div>
+      <div class="ui-grid-col-3">
+        <button pButton type="submit" label="Submit" [disabled]="!detform.valid" (click)="updateDetails()"></button>
+      </div>
+    </div>
+  </div>
+</form>
+</div>

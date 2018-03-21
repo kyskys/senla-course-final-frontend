@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import {PairGetDto} from '../entity/PairGetDto';
 import {PairMainDto} from '../entity/PairMainDto';
@@ -9,6 +9,7 @@ import {SelectedItemDto} from'../entity/SelectedItemDto';
 import {TimetableItemDto} from'../entity/TimetableItemDto';
 import {SelectItem} from 'primeng/api';
 import {MessageService} from 'primeng/components/common/messageservice';
+import {Validators,FormControl,FormGroup,FormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-timetable',
@@ -16,19 +17,25 @@ import {MessageService} from 'primeng/components/common/messageservice';
   styleUrls: ['./timetable.component.css'],
   providers: [HttpService, MessageService]
 })
-export class TimetableComponent {
+export class TimetableComponent implements OnInit{
 
 pairService = new PairService(this.http);
 groupService = new GroupService(this.http);
 days: SelectItem[] = [];
-selectedDay: SelectItem;
 groups: SelectItem[] = [];
-selectedGroup: SelectItem;
 cols:any[];
 pairs:TimetableItemDto[] = [];
 rowGroupMetadata: any;
+timeform: FormGroup;
 
-  constructor(private http:HttpService,private messageService: MessageService) {
+  ngOnInit() {
+     this.timeform = this.formBuilder.group({
+            'day': new FormControl('', Validators.required),
+            'group': new FormControl('', Validators.required)
+        });
+  }
+
+  constructor(private http:HttpService,private messageService: MessageService, private formBuilder: FormBuilder) {
     this.generateDays();
     this.cols=[
             { field: 'date', header: 'Date' },
@@ -47,7 +54,7 @@ rowGroupMetadata: any;
   generateDays() {
     let startDay = moment().startOf("isoWeek");
     let endDay = moment().endOf("isoWeek");
-  	for (var i = 4; i >= 0; i--) {
+  	for (var i = 0; i <=4; i++) {
   		this.days.push(
         {label:startDay.subtract(7,'d').format("DD/MM/YYYY")+" - "+endDay.subtract(7,'d').format("DD/MM/YYYY"),value:startDay.format("DD/MM/YYYY")});
     }
@@ -63,7 +70,7 @@ rowGroupMetadata: any;
   }
 
   getTimetable() {
-     this.pairService.getTimetableByWeek(String(this.selectedDay),Number(this.selectedGroup)).subscribe( data => {
+     this.pairService.getTimetableByWeek(this.timeform.value.day,this.timeform.value.group).subscribe( data => {
       if(data.length===0){
         this.messageService.add({severity:'info',summary:'',detail:'No data found'});
       } else {
